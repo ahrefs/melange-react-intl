@@ -1,0 +1,16 @@
+node_modules/
+lib/
+dist/
+.cache
+.merlin
+.bsb.lock
+*.bs.js
+
+bs-react-intl/ppx
+.merlin
+_build
+_esy
+_release
+*.byte
+*.native
+*.install

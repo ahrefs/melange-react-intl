@@ -1,0 +1,21 @@
+{
+  "name": "@ahrefs/bs-react-intl-ppx",
+  "description": "PPX simplifies react-intl internalization library usage",
+   "scripts": {
+    "format": "esy b dune build @fmt --auto-promote --root .",
+    "release-static": "esy b dune build --root . --only-packages bs-react-intl-ppx --ignore-promoted-rules --no-config --profile release-static"
+  },
+  "esy": {
+    "build": [["dune", "build", "-p", "bs-react-intl-ppx"]],
+    "buildsInSource": "_build"
+  },
+  "dependencies": {
+    "ocaml": "4.12.0",
+    "@opam/dune": "^2.7.0",
+    "@opam/ppxlib": ">= 0.21.0",
+    "@opam/reason": "^3.7.0"
+  },
+  "devDependencies": {
+    "@opam/ocaml-lsp-server": "*"
+  }
+}

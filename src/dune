@@ -1,0 +1,9 @@
+(library
+ (name BsReactIntlPpx)
+ (public_name bs-react-intl-ppx.lib)
+ (libraries ppxlib)
+ (flags
+  (:standard -w -9))
+ (kind ppx_rewriter)
+ (preprocess
+  (pps ppxlib.metaquot)))
