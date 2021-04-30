@@ -10,12 +10,9 @@
     "buildsInSource": "_build"
   },
   "dependencies": {
-    "ocaml": "4.8.1000",
+    "ocaml": "4.12.0",
     "@opam/dune": "*",
     "@opam/ppxlib": ">= 0.21.0",
     "@opam/reason": "*"
-  },
-  "devDependencies": {
-    "@opam/ocaml-lsp-server": "*"
   }
 }
