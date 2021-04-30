@@ -10,7 +10,7 @@
     "buildsInSource": "_build"
   },
   "dependencies": {
-    "ocaml": "4.11.2000",
+    "ocaml": "4.12.0",
     "@opam/dune": "^2.7.0",
     "@opam/ppxlib": ">= 0.21.0",
     "@opam/reason": "^3.7.0"
