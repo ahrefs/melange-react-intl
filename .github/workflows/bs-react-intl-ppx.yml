@@ -5,7 +5,6 @@ on: [push, pull_request]
 defaults:
   run:
     shell: bash
-    working-directory: bs-react-intl-ppx
 
 jobs:
   test_and_build:
