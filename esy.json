@@ -6,7 +6,7 @@
     "release-static": "esy b dune build --root . --only-packages bs-react-intl-ppx --ignore-promoted-rules --no-config --profile release-static"
   },
   "esy": {
-    "build": [["dune", "build", "-p", "bs-react-intl-ppx"]],
+    "build": [["dune", "build", "-verbose", "-p", "bs-react-intl-ppx"]],
     "buildsInSource": "_build"
   },
   "dependencies": {
