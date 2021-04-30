@@ -18,7 +18,7 @@ jobs:
           node-version: 12
       - uses: actions/checkout@v2
 
-      - run: npm install -g esy@0.6.8
+      - run: npm install -g esy@0.6.6
 
       - name: Try to restore install cache
         uses: actions/cache@v1

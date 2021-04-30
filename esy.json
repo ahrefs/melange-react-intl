@@ -13,6 +13,6 @@
     "ocaml": "4.12.0",
     "@opam/dune": "*",
     "@opam/ppxlib": ">= 0.21.0",
-    "@opam/reason": "*"
+    "@opam/reason": "3.7.0"
   }
 }
