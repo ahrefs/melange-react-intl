@@ -101,12 +101,12 @@ jobs:
           name: macos-latest
           path: binaries/darwin
 
-      - name: Download windows artifacts
-        if: success()
-        uses: actions/download-artifact@v2
-        with:
-          name: windows-latest
-          path: binaries/windows
+      # - name: Download windows artifacts
+      #   if: success()
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: windows-latest
+      #     path: binaries/windows
 
       - name: Move artifacts
         if: success()
