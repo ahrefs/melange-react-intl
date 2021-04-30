@@ -92,21 +92,21 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: ubuntu-latest
-          path: bs-react-intl-ppx/binaries/linux
+          path: binaries/linux
 
       - name: Download macOS artifacts
         if: success()
         uses: actions/download-artifact@v2
         with:
           name: macos-latest
-          path: bs-react-intl-ppx/binaries/darwin
+          path: binaries/darwin
 
       - name: Download windows artifacts
         if: success()
         uses: actions/download-artifact@v2
         with:
           name: windows-latest
-          path: bs-react-intl-ppx/binaries/windows
+          path: binaries/windows
 
       - name: Move artifacts
         if: success()
