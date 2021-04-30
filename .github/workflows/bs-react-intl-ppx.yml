@@ -47,19 +47,19 @@ jobs:
 
       - name: "[Test] esy install"
         run: esy install
-        working-directory: bs-react-intl-ppx/test
+        working-directory: test
 
       - name: "[Test] esy build"
         run: esy build
-        working-directory: bs-react-intl-ppx/test
+        working-directory: test
 
       - name: "[Test] yarn install"
         run: yarn install
-        working-directory: bs-react-intl-ppx/test
+        working-directory: test
 
       - name: "[Test] yarn build"
         run: yarn build
-        working-directory: bs-react-intl-ppx/test
+        working-directory: test
 
       - name: Generate ppx binaries
         run: esy release-static
@@ -69,7 +69,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.os }}
-          path: bs-react-intl-ppx/_build/default/bin/BsEmotionPpx.exe
+          path: _build/default/bin/BsEmotionPpx.exe
 
       - name: Cleanup
         run: |
