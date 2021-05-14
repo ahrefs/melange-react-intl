@@ -42,9 +42,6 @@ jobs:
           key: build-${{ matrix.os }}-${{ hashFiles('**/index.json') }}
           restore-keys: build-${{ matrix.os }}-
 
-      - name: Esy solve
-        run: esy solve
-
       - name: Build
         run: esy build
 
