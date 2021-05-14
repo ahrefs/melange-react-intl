@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "ocaml": "4.12.0",
-    "@opam/dune": "*",
+    "@opam/dune": "^2.8.5",
     "@opam/ppxlib": ">= 0.21.0",
     "@opam/reason": "3.7.0"
   },

@@ -1,5 +1,5 @@
 {
-  "checksum": "5b59b3ad451f7fe86948dad044a659a4",
+  "checksum": "1c31b1bf0d1781e5413f0e09330ace82",
   "root": "@ahrefs/bs-react-intl-ppx@link-dev:./esy.json",
   "node": {
     "ocaml@4.12.0@d41d8cd9": {
