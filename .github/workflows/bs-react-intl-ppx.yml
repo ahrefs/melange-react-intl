@@ -5,7 +5,6 @@ on: [push, pull_request]
 defaults:
   run:
     shell: bash
-    working-directory: bs-react-intl-ppx
 
 jobs:
   test_and_build:
@@ -19,7 +18,7 @@ jobs:
           node-version: 12
       - uses: actions/checkout@v2
 
-      - run: npm install -g esy
+      - run: npm install -g esy@0.6.6
 
       - name: Try to restore install cache
         uses: actions/cache@v1
@@ -33,7 +32,6 @@ jobs:
       - name: Print esy cache
         id: print_esy_cache
         run: |
-          cd ..
           node .github/workflows/print_esy_cache.js
 
       - name: Try to restore build cache
@@ -49,19 +47,19 @@ jobs:
 
       - name: "[Test] esy install"
         run: esy install
-        working-directory: bs-react-intl-ppx/test
+        working-directory: test
 
       - name: "[Test] esy build"
         run: esy build
-        working-directory: bs-react-intl-ppx/test
+        working-directory: test
 
       - name: "[Test] yarn install"
         run: yarn install
-        working-directory: bs-react-intl-ppx/test
+        working-directory: test
 
       - name: "[Test] yarn build"
         run: yarn build
-        working-directory: bs-react-intl-ppx/test
+        working-directory: test
 
       - name: Generate ppx binaries
         run: esy release-static
@@ -71,7 +69,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: ${{ matrix.os }}
-          path: bs-react-intl-ppx/_build/default/bin/BsEmotionPpx.exe
+          path: _build/default/bin/BsReactIntlPpxBin.exe
 
       - name: Cleanup
         run: |
@@ -94,21 +92,21 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: ubuntu-latest
-          path: bs-react-intl-ppx/binaries/linux
+          path: binaries/linux
 
       - name: Download macOS artifacts
         if: success()
         uses: actions/download-artifact@v2
         with:
           name: macos-latest
-          path: bs-react-intl-ppx/binaries/darwin
+          path: binaries/darwin
 
       - name: Download windows artifacts
         if: success()
         uses: actions/download-artifact@v2
         with:
           name: windows-latest
-          path: bs-react-intl-ppx/binaries/windows
+          path: binaries/windows
 
       - name: Move artifacts
         if: success()
@@ -116,9 +114,9 @@ jobs:
           mkdir -p exe
           ls -la binaries
           ls -la binaries/darwin
-          mv binaries/darwin/BsEmotionPpx.exe exe/bs-react-intl-ppx-darwin-x64.exe
-          mv binaries/windows/BsEmotionPpx.exe exe/bs-react-intl-ppx-win-x64.exe
-          mv binaries/linux/BsEmotionPpx.exe exe/bs-react-intl-ppx-linux-x64.exe
+          mv binaries/darwin/BsReactIntlPpxBin.exe exe/bs-react-intl-ppx-darwin-x64.exe
+          mv binaries/windows/BsReactIntlPpxBin.exe exe/bs-react-intl-ppx-win-x64.exe
+          mv binaries/linux/BsReactIntlPpxBin.exe exe/bs-react-intl-ppx-linux-x64.exe
 
       - name: Upload artifacts ${{ matrix.os }}
         # if: github.event_name != 'pull_request' && startsWith(github.ref, 'refs/tags/')
