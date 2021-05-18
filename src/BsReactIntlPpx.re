@@ -5,17 +5,21 @@ let makeId = message => message |> Digest.string |> Digest.to_hex;
 let makeIntlRecord = (~message, ~messageExp, ~loc) => {
   let id = message |> makeId;
   let idExp = Ast_helper.Exp.constant(Pconst_string(id, loc, None));
-  [%expr ([@warning "-45"] ReactIntl.{id: [%e idExp], defaultMessage: [%e messageExp]})];
+  %expr
+  [@warning "-45"]
+  ReactIntl.{id: [%e idExp], defaultMessage: [%e messageExp]};
 };
 
 let makeStringResolver = (~message, ~messageExp, ~loc) => {
   let recordExp = makeIntlRecord(~loc, ~message, ~messageExp);
-  [%expr ReactIntlPpxAdaptor.Message.to_s([%e recordExp])]
+  %expr
+  ReactIntlPpxAdaptor.Message.to_s([%e recordExp]);
 };
 
 let makeReactElementResolver = (~message, ~messageExp, ~loc) => {
   let stringResolverExp = makeStringResolver(~loc, ~message, ~messageExp);
-  [%expr React.string([%e stringResolverExp])];
+  %expr
+  React.string([%e stringResolverExp]);
 };
 
 class mapper = {

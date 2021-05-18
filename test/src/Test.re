@@ -17,10 +17,16 @@ module React = {
 };
 
 let message: ReactIntl.message = [%intl "blabla"];
-let descriptedMessage: ReactIntl.message = [%intl {msg: "blabla", desc: "i am description"}]
+let descriptedMessage: ReactIntl.message = [%intl
+  {msg: "blabla", desc: "i am description"}
+];
 
 let message2: string = [%intl.s "blabla"];
-let descriptedmessage2: string = [%intl.s {msg: "blabla", desc: "i am description"}];
+let descriptedmessage2: string = [%intl.s
+  {msg: "blabla", desc: "i am description"}
+];
 
 let element3: React.element = [%intl.el "blabla"];
-let descriptedElement3: React.element = [%intl.el {msg: "blabla", desc: "i am description"}];
+let descriptedElement3: React.element = [%intl.el
+  {msg: "blabla", desc: "i am description"}
+];
