@@ -1,4 +1,22 @@
-# Overview
+# bs-react-intl-ppx
+
+## Installation
+Get the package:
+
+```shell
+# yarn
+yarn add --dev @ahrefs/bs-react-intl-ppx
+# or npm
+npm install --save-dev @ahrefs/bs-react-intl-ppx
+```
+
+Then add it to `bsconfig.json`:
+
+```json
+"ppx-flags": ["@ahrefs/bs-react-intl-ppx/ppx"],
+```
+
+## Overview
 
 This ppx allows you to create `ReactIntl.messages` records without specifying `id`, which significantly reduces the amount of boilerplate code and simplifies the translation process.
 
@@ -23,7 +41,7 @@ Ppx also supports descripted messages:
 let descriptedMessage: ReactIntl.message = [%intl {msg: "blabla", desc: "i am description"}]
 ```
 
-# Usage with [rescript-react-intl](https://github.com/cca-io/rescript-react-intl)
+## Usage with [rescript-react-intl](https://github.com/cca-io/rescript-react-intl)
 
 ```reason
 // Some component
@@ -51,7 +69,7 @@ let make = (~item: ReactIntl.message, ~values: Js.t({..})) =>
 ```
 
 
-# Advanced usage
+## Advanced usage
 
 There is an option to generate localized string straight from the ppx (without explicit helper functions usage).
 This option could be helpful for you if you don't need to change page language without page reloading.
