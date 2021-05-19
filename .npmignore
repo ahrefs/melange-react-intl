@@ -1,0 +1,10 @@
+/_build
+/_esy
+/.vscode
+/node_modules
+/.github
+/test
+/esy.lock
+esy.json
+dune-project
+bs-react-intl-ppx.opam
