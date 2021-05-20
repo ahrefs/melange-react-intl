@@ -123,4 +123,3 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Release
-          path: bs-react-intl-ppx
