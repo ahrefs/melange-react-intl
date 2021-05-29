@@ -16,7 +16,7 @@ module React = {
   let string = (localizedString: string): element => localizedString;
 };
 
-let message: ReactIntl.message = [%intl "i am message"]
+let message: ReactIntl.message = [%intl "i am message"];
 let descriptedMessage: ReactIntl.message = [%intl
   {msg: "i am message", desc: "i am description"}
 ];
