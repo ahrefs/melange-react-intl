@@ -109,21 +109,17 @@ class mapper = {
   inherit class Ast_traverse.map as super;
   pub! expression = e =>
     switch (e) {
-    | {
-        pexp_desc:
-          Pexp_extension(({txt: "intl" | "intl_stub", loc}, payload)),
-      } =>
+    | {pexp_desc: Pexp_extension(({txt: "intl" | "intl_stub"}, payload))} =>
       makeIntlRecord(~payload, ~loc=e.pexp_loc)
 
     | {
-        pexp_desc:
-          Pexp_extension(({txt: "intl.s" | "intl_stub.s", loc}, payload)),
+        pexp_desc: Pexp_extension(({txt: "intl.s" | "intl_stub.s"}, payload)),
       } =>
       makeStringResolver(~payload, ~loc=e.pexp_loc)
 
     | {
         pexp_desc:
-          Pexp_extension(({txt: "intl.el" | "intl_stub.el", loc}, payload)),
+          Pexp_extension(({txt: "intl.el" | "intl_stub.el"}, payload)),
       } =>
       makeReactElementResolver(~payload, ~loc=e.pexp_loc)
 
