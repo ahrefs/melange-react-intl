@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-18.04, macos-latest, windows-latest]
+        os: [ubuntu-18.04, macos-latest]
     steps:
       - uses: actions/setup-node@v1
         with:
@@ -101,13 +101,6 @@ jobs:
           name: macos-latest
           path: binaries/darwin
 
-      - name: Download windows artifacts
-        if: success()
-        uses: actions/download-artifact@v2
-        with:
-          name: windows-latest
-          path: binaries/windows
-
       - name: Move artifacts
         if: success()
         run: |
@@ -115,7 +108,6 @@ jobs:
           ls -la binaries
           ls -la binaries/darwin
           mv binaries/darwin/BsReactIntlPpxBin.exe exe/bs-react-intl-ppx-darwin-x64.exe
-          mv binaries/windows/BsReactIntlPpxBin.exe exe/bs-react-intl-ppx-win-x64.exe
           mv binaries/linux/BsReactIntlPpxBin.exe exe/bs-react-intl-ppx-linux-x64.exe
 
       - name: Upload artifacts ${{ matrix.os }}
