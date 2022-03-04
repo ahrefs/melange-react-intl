@@ -52,7 +52,7 @@ let make = () => {
   let l = message => intl->ReactIntl.Intl.formatMessage(message);
 
   <>
-    <h1>[%intl "Some header"]->l->React.string</h2>
+    <h1>[%intl "Some header"]->l->React.string</h1>
     <p>[%intl "Some body"]->l->React.string</p>
   </>
 }
@@ -68,6 +68,10 @@ let make = (~item: ReactIntl.message, ~values: Js.t({..})) =>
   <ReactIntl.FormattedMessage id={item.id} defaultMessage={item.defaultMessage} values />;
 ```
 
+## Draft phrases
+
+If you want to make [extactor](https://github.com/cca-io/rescript-react-intl-extractor) ignore some phrases, you can use `intl_draft` / `intl_draft.s`/ `intl_draft.el` extensions.
+It is helpful if you don't want some draft phrases (likely to change soon) to be sent to translators.
 
 ## Advanced usage
 
