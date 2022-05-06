@@ -93,7 +93,7 @@ let makeIntlRecord = (~payload, ~loc) => {
 };
 
 type objectFields = list((string, core_type));
-let buildValuesType = (~loc, fields: objectFields): core_type => {
+let makeValuesType = (~loc, fields: objectFields): core_type => {
   let objectFields =
     fields
     |> List.map(((label, coreType)) =>
@@ -127,11 +127,11 @@ let makeStringResolver = (~payload, ~loc) => {
     let valuesType =
       variables
       |> List.map(fieldLabel => (fieldLabel, [%type: string]))
-      |> buildValuesType(~loc);
+      |> makeValuesType(~loc);
     %expr
     (
-      (values: [%t valuesType]) => (
-        ReactIntlPpxAdaptor.Message.format_to_s([%e recordExp], value): string
+      (values: Js.t([%t valuesType])) => (
+        ReactIntlPpxAdaptor.Message.format_to_s([%e recordExp], values): string
       )
     );
   | None =>
