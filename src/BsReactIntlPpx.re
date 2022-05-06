@@ -94,8 +94,22 @@ let makeIntlRecord = (~payload, ~loc) => {
 
 let makeStringResolver = (~payload, ~loc) => {
   let recordExp = makeIntlRecord(~payload, ~loc);
-  %expr
-  ReactIntlPpxAdaptor.Message.to_s([%e recordExp]);
+  let (message, _messageExp, _description) = parsePayload(~loc, payload);
+  let variblesRegexp = Re2.create_exn("{(\\w+)}");
+  let simpleVariables =
+    switch(Re2.find_all_exn(~sub=`Index(1),  variblesRegexp,  message)) {
+      | exception _ => None
+      | results => Some(results)
+    };
+
+  switch (simpleVariables) {
+  | Some(variables) =>
+    %expr
+    values => ReactIntlPpxAdaptor.Message.formatWithValue([%e recordExp], value);
+  | None =>
+    %expr
+    ReactIntlPpxAdaptor.Message.to_s([%e recordExp]);
+  };
 };
 
 let makeReactElementResolver = (~payload, ~loc) => {

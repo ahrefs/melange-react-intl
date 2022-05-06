@@ -1,7 +1,7 @@
 (library
  (name BsReactIntlPpx)
  (public_name bs-react-intl-ppx.lib)
- (libraries ppxlib)
+ (libraries ppxlib re2)
  (flags
   (:standard -w -9))
  (kind ppx_rewriter)
