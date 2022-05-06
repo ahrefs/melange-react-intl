@@ -92,23 +92,51 @@ let makeIntlRecord = (~payload, ~loc) => {
   ReactIntl.{id: [%e idExp], defaultMessage: [%e messageExp]};
 };
 
+type objectFields = list((string, core_type));
+let buildValuesType = (~loc, fields: objectFields): core_type => {
+  let objectFields =
+    fields
+    |> List.map(((label, coreType)) =>
+         {
+           pof_desc: Otag({txt: label, loc}, coreType),
+           pof_loc: loc,
+           pof_attributes: [],
+         }
+       );
+
+  {
+    ptyp_desc: Ptyp_object(objectFields, Closed),
+    ptyp_loc: loc,
+    ptyp_loc_stack: [loc],
+    ptyp_attributes: [],
+  };
+};
+
 let makeStringResolver = (~payload, ~loc) => {
   let recordExp = makeIntlRecord(~payload, ~loc);
   let (message, _messageExp, _description) = parsePayload(~loc, payload);
   let variblesRegexp = Re2.create_exn("{(\\w+)}");
   let simpleVariables =
-    switch(Re2.find_all_exn(~sub=`Index(1),  variblesRegexp,  message)) {
-      | exception _ => None
-      | results => Some(results)
+    switch (Re2.find_all_exn(~sub=`Index(1), variblesRegexp, message)) {
+    | exception _ => None
+    | results => Some(results)
     };
 
   switch (simpleVariables) {
   | Some(variables) =>
+    let valuesType =
+      variables
+      |> List.map(fieldLabel => (fieldLabel, [%type: string]))
+      |> buildValuesType(~loc);
     %expr
-    values => ReactIntlPpxAdaptor.Message.formatWithValue([%e recordExp], value);
+    (
+      (values: [%t valuesType]) => (
+        ReactIntlPpxAdaptor.Message.format_to_s([%e recordExp], value): string
+      )
+    );
   | None =>
     %expr
-    ReactIntlPpxAdaptor.Message.to_s([%e recordExp]);
+    ReactIntlPpxAdaptor.Message.to_s([%e recordExp])
   };
 };
 
@@ -127,7 +155,8 @@ class mapper = {
       makeIntlRecord(~payload, ~loc=e.pexp_loc)
 
     | {
-        pexp_desc: Pexp_extension(({txt: "intl.s" | "intl_draft.s"}, payload)),
+        pexp_desc:
+          Pexp_extension(({txt: "intl.s" | "intl_draft.s"}, payload)),
       } =>
       makeStringResolver(~payload, ~loc=e.pexp_loc)
 
