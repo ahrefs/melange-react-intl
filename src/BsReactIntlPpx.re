@@ -93,6 +93,7 @@ let makeIntlRecord = (~payload, ~loc) => {
 };
 
 type objectFields = list((string, core_type));
+
 let makeValuesType = (~loc, fields: objectFields): core_type => {
   let objectFields =
     fields
@@ -112,31 +113,50 @@ let makeValuesType = (~loc, fields: objectFields): core_type => {
   };
 };
 
+let variblesRegexp = Re2.create_exn("{(\\w+)}");
+let pluralRegexp =
+  Re2.create_exn(
+    "{(\\w+), plural, zero {[A-Za-z ]+} one {[A-Za-z ]+} few {[A-Za-z ]+} other {[A-Za-z ]+}}",
+  );
+
+let findAll = (~regexp, s) =>
+  switch (Re2.find_all_exn(~sub=`Index(1), regexp, s)) {
+  | exception _ => []
+  | results => results
+  };
+
+let remove = (~regexp, s) =>
+  switch (Re2.replace_exn(~f=_ => "", pluralRegexp, s)) {
+  | exception _ => s
+  | result => result
+  };
+
 let makeStringResolver = (~payload, ~loc) => {
   let recordExp = makeIntlRecord(~payload, ~loc);
   let (message, _messageExp, _description) = parsePayload(~loc, payload);
-  let variblesRegexp = Re2.create_exn("{(\\w+)}");
+  let pluralVariables =
+    message
+    |> findAll(~regexp=pluralRegexp)
+    |> List.map(label => (label, [%type: int]));
+  let cleanedMessage = message |> remove(~regexp=pluralRegexp);
   let simpleVariables =
-    switch (Re2.find_all_exn(~sub=`Index(1), variblesRegexp, message)) {
-    | exception _ => None
-    | results => Some(results)
-    };
+    cleanedMessage
+    |> findAll(~regexp=variblesRegexp)
+    |> List.map(label => (label, [%type: string]));
+  let variables = simpleVariables @ pluralVariables;
 
-  switch (simpleVariables) {
-  | Some(variables) =>
-    let valuesType =
-      variables
-      |> List.map(fieldLabel => (fieldLabel, [%type: string]))
-      |> makeValuesType(~loc);
+  switch (variables) {
+  | [] =>
+    %expr
+    ReactIntlPpxAdaptor.Message.to_s([%e recordExp])
+  | variables =>
+    let valuesType = variables |> makeValuesType(~loc);
     %expr
     (
       (values: Js.t([%t valuesType])) => (
         ReactIntlPpxAdaptor.Message.format_to_s([%e recordExp], values): string
       )
     );
-  | None =>
-    %expr
-    ReactIntlPpxAdaptor.Message.to_s([%e recordExp])
   };
 };
 
