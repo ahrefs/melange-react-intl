@@ -118,6 +118,7 @@ let pluralRegexp =
   Re2.create_exn(
     "{(\\w+), plural, zero {[A-Za-z ]+} one {[A-Za-z ]+} few {[A-Za-z ]+} other {[A-Za-z ]+}}",
   );
+let richTextRegexp = Re2.create_exn("<(\\w+)>[A-Za-z ]+</\\w+>");
 
 let findAll = (~regexp, s) =>
   switch (Re2.find_all_exn(~sub=`Index(1), regexp, s)) {
@@ -161,9 +162,36 @@ let makeStringResolver = (~payload, ~loc) => {
 };
 
 let makeReactElementResolver = (~payload, ~loc) => {
-  let stringResolverExp = makeStringResolver(~payload, ~loc);
-  %expr
-  React.string([%e stringResolverExp]);
+  let recordExp = makeIntlRecord(~payload, ~loc);
+  let (message, _messageExp, _description) = parsePayload(~loc, payload);
+  let pluralVariables =
+    message
+    |> findAll(~regexp=pluralRegexp)
+    |> List.map(label => (label, [%type: int]));
+  let cleanedMessage = message |> remove(~regexp=pluralRegexp);
+  let simpleVariables =
+    cleanedMessage
+    |> findAll(~regexp=variblesRegexp)
+    |> List.map(label => (label, [%type: React.element]));
+  let richTextVariables =
+    cleanedMessage
+    |> findAll(~regexp=richTextRegexp)
+    |> List.map(label => (label, [%type: string => React.element]));
+  let variables = simpleVariables @ pluralVariables @ richTextVariables;
+
+  switch (variables) {
+  | [] =>
+    %expr
+    ReactIntlPpxAdaptor.Message.to_s([%e recordExp])->React.string
+  | variables =>
+    let valuesType = variables |> makeValuesType(~loc);
+    %expr
+    (
+      (values: Js.t([%t valuesType])) =>
+        ReactIntlPpxAdaptor.Message.format_to_s([%e recordExp], values)
+        ->React.string
+    );
+  };
 };
 
 class mapper = {
