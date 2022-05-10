@@ -113,36 +113,38 @@ let makeValuesType = (~loc, fields: objectFields): core_type => {
   };
 };
 
-let variblesRegexp = Re2.create_exn("{(\\w+)}");
-let pluralRegexp =
-  Re2.create_exn(
-    "{(\\w+), plural, zero {[A-Za-z ]+} one {[A-Za-z ]+} few {[A-Za-z ]+} other {[A-Za-z ]+}}",
-  );
-let richTextRegexp = Re2.create_exn("<(\\w+)>[A-Za-z ]+</\\w+>");
+module Regexp = {
+  let variable = Re.Pcre.regexp("\\{(\\w+)}");
+  let plural =
+    Re.Pcre.regexp(
+      "\\{(\\w+), plural, zero \\{[A-Za-z ]+\\} one \\{[A-Za-z ]+\\} few \\{[A-Za-z ]+\\} other \\{[A-Za-z ]+\\}\\}",
+    );
+  let richText = Re.Pcre.regexp("<(\\w+)>[A-Za-z ]+</\\w+>");
 
-let findAll = (~regexp, s) =>
-  switch (Re2.find_all_exn(~sub=`Index(1), regexp, s)) {
-  | exception _ => []
-  | results => results
-  };
+  let findAll = (~regexp, s) =>
+    Re.all(regexp, s)
+    /* every match implicitly has a group 0 that covers the whole match, */
+    /* and explicit groups are numbered from 1 */
+    |> List.map(Re.Group.get(_, 1))
+    |> List.sort_uniq(String.compare);
 
-let remove = (~regexp, s) =>
-  switch (Re2.replace_exn(~f=_ => "", pluralRegexp, s)) {
-  | exception _ => s
-  | result => result
-  };
+  let remove = (~regexp, s) =>
+    Re.replace_string(~all=true, regexp, ~by="", s);
+};
 
 let makeStringResolver = (~payload, ~loc) => {
   let recordExp = makeIntlRecord(~payload, ~loc);
   let (message, _messageExp, _description) = parsePayload(~loc, payload);
   let pluralVariables =
     message
-    |> findAll(~regexp=pluralRegexp)
+    |> Regexp.findAll(~regexp=Regexp.plural)
     |> List.map(label => (label, [%type: int]));
-  let cleanedMessage = message |> remove(~regexp=pluralRegexp);
+  let cleanedMessage =
+    pluralVariables == []
+      ? message : message |> Regexp.remove(~regexp=Regexp.plural);
   let simpleVariables =
     cleanedMessage
-    |> findAll(~regexp=variblesRegexp)
+    |> Regexp.findAll(~regexp=Regexp.variable)
     |> List.map(label => (label, [%type: string]));
   let variables = simpleVariables @ pluralVariables;
 
@@ -166,16 +168,16 @@ let makeReactElementResolver = (~payload, ~loc) => {
   let (message, _messageExp, _description) = parsePayload(~loc, payload);
   let pluralVariables =
     message
-    |> findAll(~regexp=pluralRegexp)
+    |> Regexp.findAll(~regexp=Regexp.plural)
     |> List.map(label => (label, [%type: int]));
-  let cleanedMessage = message |> remove(~regexp=pluralRegexp);
+  let cleanedMessage = message |> Regexp.remove(~regexp=Regexp.plural);
   let simpleVariables =
     cleanedMessage
-    |> findAll(~regexp=variblesRegexp)
+    |> Regexp.findAll(~regexp=Regexp.variable)
     |> List.map(label => (label, [%type: React.element]));
   let richTextVariables =
     cleanedMessage
-    |> findAll(~regexp=richTextRegexp)
+    |> Regexp.findAll(~regexp=Regexp.richText)
     |> List.map(label => (label, [%type: string => React.element]));
   let variables = simpleVariables @ pluralVariables @ richTextVariables;
 
