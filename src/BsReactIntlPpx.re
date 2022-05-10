@@ -117,9 +117,9 @@ module Regexp = {
   let variable = Re.Pcre.regexp("\\{(\\w+)}");
   let plural =
     Re.Pcre.regexp(
-      "\\{(\\w+), plural, zero \\{[A-Za-z ]+\\} one \\{[A-Za-z ]+\\} few \\{[A-Za-z ]+\\} other \\{[A-Za-z ]+\\}\\}",
+      "\\{(\\w+), plural, zero \\{[^\\}]+\\} one \\{[^\\}]+\\} few \\{[^\\}]+\\}(?: many \\{[^\\}]+\\})? other \\{[A-Za-z ]+\\}\\}",
     );
-  let richText = Re.Pcre.regexp("<(\\w+)>[A-Za-z ]+</\\w+>");
+  let richText = Re.Pcre.regexp("<(\\w+)>[^<]+</\\w+>");
 
   let findAll = (~regexp, s) =>
     Re.all(regexp, s)
