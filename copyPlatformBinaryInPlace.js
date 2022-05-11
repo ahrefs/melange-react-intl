@@ -35,16 +35,12 @@ function copyBinary(filename, destFilename) {
 
   }
 
-  if (!fs.existsSync(destFilename)) {
-    copyFileSync(filename, destFilename);
-    fs.chmodSync(destFilename, 0755);
-  }
+  copyFileSync(filename, destFilename);
+  fs.chmodSync(destFilename, 0755);
 
   var destFilenameExe = destFilename + ".exe";
-  if (!fs.existsSync(destFilenameExe)) {
-    copyFileSync(filename, destFilenameExe);
-    fs.chmodSync(destFilenameExe, 0755);
-  }
+  copyFileSync(filename, destFilenameExe);
+  fs.chmodSync(destFilenameExe, 0755);
 }
 
 function copyFileSync(source, dest) {
