@@ -82,8 +82,7 @@ This option could be helpful for you if you don't need to change page language w
 ```reason
 let message: string = [%intl.s "i am message"] // type string
 ```
-Which will be converted to the:
-
+converts to ⬇️
 ```reason
 let message: string = {id: "168c9a2987fad481c5882847ac102aaf", defaultMessage: "i am message"}->ReactIntPpxAdaptor.Message.to_s
 ```
@@ -91,10 +90,19 @@ let message: string = {id: "168c9a2987fad481c5882847ac102aaf", defaultMessage: "
 ```reason
 let element: React.element = [%intl.el "i am message"]
 ```
-Which will be converted to the:
-
+converts to ⬇️
 ```reason
 let element: React.element = {id: "168c9a2987fad481c5882847ac102aaf", defaultMessage: "i am message"}->ReactIntPpxAdaptor.Message.to_s->React.string
 ```
 
-To use this features you have to define `ReactIntlPpxAdaptor` in your app (see test folder for details).
+- Ppx supports variables, plural forms and [rich text formatting](https://formatjs.io/docs/react-intl/components/#rich-text-formatting) in payload. In this case ppx will return function instead of ReactIntl.message
+```reason
+let element: React.element = [%intl.el "i am message with {variable}"]
+```
+converts to ⬇️
+```reason
+let element: React.element =
+  (values: {. "variable": React.element}) => {id: "168c9a2987fad481c5kgmcntg5k3dsd5", defaultMessage: "i am message with {variable}"}->ReactIntPpxAdaptor.Message.format_to_s(_, values)->React.string
+```
+
+To use those features you have to define `ReactIntlPpxAdaptor` in your app (see test folder for details).
