@@ -1,0 +1,3 @@
+# Supresses the lock folder from the diffs
+esy.lock/* linguist-generated=true
+test/esy.lock/* linguist-generated=true
