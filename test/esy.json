@@ -1,6 +1,6 @@
 {
   "name": "bs-react-intl-ppx-integration-test",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "dependencies": {
     "bs-react-intl-ppx": "*"
   },

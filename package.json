@@ -1,6 +1,6 @@
 {
   "name": "@ahrefs/bs-react-intl-ppx",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Generete ReactIntl.messages",
   "author": "Egor Chemokhonenko <egor.chemohonenko@ahrefs.com>",
   "license": "MIT",

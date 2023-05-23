@@ -1,5 +1,9 @@
 # History
 
+## 0.1.1
+
+- Pipe-first usage removed [PR](https://github.com/ahrefs/bs-react-intl-ppx/pull/11)
+
 ## 0.1.0
 
 - Formatted message signatures generation for `intl.s` and `intl.el` [PR](https://github.com/ahrefs/bs-react-intl-ppx/pull/8)
