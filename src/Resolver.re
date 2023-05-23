@@ -163,14 +163,15 @@ let makeReactElement = (~payload, ~loc) => {
   switch (variables) {
   | [] =>
     %expr
-    ReactIntlPpxAdaptor.Message.to_s([%e recordExp]) |> React.string
+    React.string(ReactIntlPpxAdaptor.Message.to_s([%e recordExp]))
   | variables =>
     let valuesType = variables |> makeValuesType(~loc);
     %expr
     (
       (values: Js.t([%t valuesType])) =>
-        ReactIntlPpxAdaptor.Message.format_to_s([%e recordExp], values)
-        |> React.string
+        React.string(
+          ReactIntlPpxAdaptor.Message.format_to_s([%e recordExp], values)
+        )
     );
   };
 };
