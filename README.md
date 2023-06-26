@@ -1,19 +1,13 @@
 # melange-react-intl-ppx
 
-These are the [Melange](https://melange.re/) bindings for [react-intl](https://github.com/formatjs/formatjs/tree/main/packages/react-intl).
+This is a [Melange](https://melange.re/) [preprocessor](https://ocaml.org/docs/metaprogramming) that eases the creation of messages when using [rescript-react-intl](https://github.com/cca-io/rescript-react-intl).
 
 ## Installation
 Install [opam](https://opam.ocaml.org/) package manager.
 Then:
 
 ```shell
-opam pin add melange-react-intl-ppx.dev git+https://github.com/ahrefs/bs-react-intl-ppx.git#eb36bab7565552fffcc59917913220f52c643db8
-```
-
-Then `react-intl` npm package should also be installed:
-
-```json
-"react-intl": "^6.4.4",
+opam pin add melange-react-intl-ppx.dev git+https://github.com/ahrefs/melange-react-intl-ppx.git#master
 ```
 
 ## Overview
