@@ -1,4 +1,3 @@
 (executable
  (name MelangeReactIntlPpxBin)
- (public_name melange-react-intl-ppx)
  (libraries melange-react-intl-ppx ppxlib))

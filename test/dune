@@ -1,4 +1,4 @@
 (library
  (name Test)
  (modes melange)
- (libraries bs_react_intl_ppx))
+ (libraries melange-react-intl-ppx))

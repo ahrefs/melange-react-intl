@@ -20,5 +20,5 @@ depends: [
   "melange" {with-dev-setup}
 ]
 
-build: [["dune" "build" "-p" "bs-react-intl-ppx"]]
+build: [["dune" "build" "-p" "melange-react-intl-ppx"]]
 
