@@ -22,7 +22,7 @@ This ppx allows you to create `ReactIntl.messages` records without specifying `i
 
 Examples:
 
-This code<M-Esc>
+This code
 ```reason
 let message: ReactIntl.message = [%intl "i am message"]
 ```
