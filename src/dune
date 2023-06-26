@@ -1,7 +1,10 @@
 (library
- (name BsReactIntlPpx)
- (public_name bs-react-intl-ppx.lib)
- (libraries ppxlib re)
+ (name MelangeReactIntlPpx)
+ (public_name melange-react-intl-ppx)
+ (libraries
+  ppxlib
+  reason
+  re) 
  (flags
   (:standard -w -9))
  (kind ppx_rewriter)

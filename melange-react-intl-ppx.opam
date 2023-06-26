@@ -1,0 +1,24 @@
+opam-version: "2.0"
+version: "git"
+maintainer: "Ahrefs"
+authors: "Ahrefs"
+dev-repo: "git+https://github.com/ahrefs/bs-react-intl-ppx.git"
+license: "MIT"
+homepage: "https://github.com/ahrefs/bs-react-intl-ppx"
+bug-reports: "https://github.com/ahrefs/bs-react-intl-ppx/issues"
+
+synopsis: "PPX simplifying usage of react-intl internationalization library"
+
+depends: [
+  "ocaml" {>= "4.14.0"}
+  "dune" {>= "3.0"}
+  "ppxlib" {>= "0.21.0"}
+  "reason" {>= "3.7.0"}
+  "re" {= "1.10.4"}
+  "ocaml-lsp-server" {with-dev-setup}
+  "ocamlformat" {with-dev-setup}
+  "melange" {with-dev-setup}
+]
+
+build: [["dune" "build" "-p" "bs-react-intl-ppx"]]
+
