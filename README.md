@@ -1,19 +1,19 @@
-# bs-react-intl-ppx
+# melange-react-intl-ppx
+
+These are the [Melange](https://melange.re/) bindings for [react-intl](https://github.com/formatjs/formatjs/tree/main/packages/react-intl).
 
 ## Installation
-Get the package:
+Install [opam](https://opam.ocaml.org/) package manager.
+Then:
 
 ```shell
-# yarn
-yarn add --dev @ahrefs/bs-react-intl-ppx
-# or npm
-npm install --save-dev @ahrefs/bs-react-intl-ppx
+opam pin add melange-react-intl-ppx.dev git+https://github.com/ahrefs/bs-react-intl-ppx.git#eb36bab7565552fffcc59917913220f52c643db8
 ```
 
-Then add it to `bsconfig.json`:
+Then `react-intl` npm package should also be installed:
 
 ```json
-"ppx-flags": ["@ahrefs/bs-react-intl-ppx/ppx"],
+"react-intl": "^6.4.4",
 ```
 
 ## Overview
@@ -22,7 +22,7 @@ This ppx allows you to create `ReactIntl.messages` records without specifying `i
 
 Examples:
 
-This code
+This code<M-Esc>
 ```reason
 let message: ReactIntl.message = [%intl "i am message"]
 ```
