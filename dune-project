@@ -1,2 +1,3 @@
-(lang dune 2.7)
-(name bs-react-intl-ppx)
+(lang dune 3.8)
+(using melange 0.1)
+(name melange-react-intl-ppx)

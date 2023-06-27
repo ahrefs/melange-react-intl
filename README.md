@@ -1,19 +1,13 @@
-# bs-react-intl-ppx
+# melange-react-intl-ppx
+
+This is a [Melange](https://melange.re/) [preprocessor](https://ocaml.org/docs/metaprogramming) that eases the creation of messages when using [rescript-react-intl](https://github.com/cca-io/rescript-react-intl).
 
 ## Installation
-Get the package:
+Install [opam](https://opam.ocaml.org/) package manager.
+Then:
 
 ```shell
-# yarn
-yarn add --dev @ahrefs/bs-react-intl-ppx
-# or npm
-npm install --save-dev @ahrefs/bs-react-intl-ppx
-```
-
-Then add it to `bsconfig.json`:
-
-```json
-"ppx-flags": ["@ahrefs/bs-react-intl-ppx/ppx"],
+opam pin add melange-react-intl-ppx.dev git+https://github.com/ahrefs/melange-react-intl-ppx.git#master
 ```
 
 ## Overview

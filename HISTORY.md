@@ -1,5 +1,9 @@
 # History
 
+## Unreleased
+
+- Migrate to opam and Melange
+
 ## 0.1.1
 
 - Pipe-first usage removed [PR](https://github.com/ahrefs/bs-react-intl-ppx/pull/11)
