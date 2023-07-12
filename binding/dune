@@ -1,0 +1,7 @@
+(library
+ (name bs_react_intl)
+ (public_name styled-ppx.bs-react-intl)
+ (modes melange)
+ (wrapped false)
+ (preprocess
+  (pps melange.ppx)))
