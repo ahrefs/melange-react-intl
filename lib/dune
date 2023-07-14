@@ -1,0 +1,7 @@
+(library
+ (name ReactIntl)
+ (public_name melange-react-intl.lib)
+ (libraries reason-react) 
+ (modes melange)
+ (preprocess
+  (pps melange.ppx reactjs-jsx-ppx)))

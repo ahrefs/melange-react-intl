@@ -1,6 +1,6 @@
-# melange-react-intl-ppx
+# melange-react-intl
 
-This is a [Melange](https://melange.re/) [preprocessor](https://ocaml.org/docs/metaprogramming) that eases the creation of messages when using [rescript-react-intl](https://github.com/cca-io/rescript-react-intl).
+This is a [react-intl](https://formatjs.io/docs/react-intl/) bindings for [Melange](https://melange.re/) and [preprocessor](https://ocaml.org/docs/metaprogramming) that eases the creation of messages.
 
 ## Installation
 Install [opam](https://opam.ocaml.org/) package manager.
@@ -12,7 +12,9 @@ opam pin add melange-react-intl-ppx.dev git+https://github.com/ahrefs/melange-re
 
 ## Overview
 
-This ppx allows you to create `ReactIntl.messages` records without specifying `id`, which significantly reduces the amount of boilerplate code and simplifies the translation process.
+The package contains 2 parts:
+- Bindings to the react-intl library
+- The PPX which allows you to create `ReactIntl.messages` records without specifying `id`, which significantly reduces the amount of boilerplate code and simplifies the translation process.
 
 Examples:
 

@@ -7,8 +7,8 @@ external dateTimeFormatOptions:
     ~formatMatcher: [@bs.string] [ | [@bs.as "best fit"] `bestFit | `basic]=?,
     ~timeZone: string=?,
     ~hour12: bool=?,
-    ~weekday: [@bs.string] [ | `narrow | `short | `long]=?,
-    ~era: [@bs.string] [ | `narrow | `short | `long]=?,
+    ~weekday:  [ | `narrow | `short | `long]=?,
+    ~era:  [ | `narrow | `short | `long]=?,
     ~year: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
     ~month: [@bs.string] [
               | `numeric
@@ -22,7 +22,7 @@ external dateTimeFormatOptions:
     ~hour: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
     ~minute: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
     ~second: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
-    ~timeZoneName: [@bs.string] [ | `short | `long]=?,
+    ~timeZoneName: [ | `short | `long]=?,
     ~format: string=?,
     unit
   ) =>
@@ -33,8 +33,8 @@ type relativeTimeFormatOptions;
 [@bs.obj]
 external relativeTimeFormatOptions:
   (
-    ~numeric: [@bs.string] [ | `always | `auto]=?,
-    ~style: [@bs.string] [ | `long | `short | `narrow]=?,
+    ~numeric:  [ | `always | `auto]=?,
+    ~style:  [ | `long | `short | `narrow]=?,
     ~format: string=?,
     unit
   ) =>
@@ -46,9 +46,9 @@ type numberFormatOptions;
 external numberFormatOptions:
   (
     ~localeMatcher: [@bs.string] [ | [@bs.as "best fit"] `bestFit | `lookup]=?,
-    ~style: [@bs.string] [ | `decimal | `currency | `percent]=?,
+    ~style:  [ | `decimal | `currency | `percent]=?,
     ~currency: string=?,
-    ~currencyDisplay: [@bs.string] [ | `symbol | `code | `name]=?,
+    ~currencyDisplay:  [ | `symbol | `code | `name]=?,
     ~useGrouping: bool=?,
     ~minimumIntegerDigits: int=?,
     ~minimumFractionDigits: int=?,
@@ -63,7 +63,7 @@ type pluralFormatOptions;
 
 [@bs.obj]
 external pluralFormatOptions:
-  (~style: [@bs.string] [ | `cardinal | `ordinal]=?, unit) =>
+  (~style:  [ | `cardinal | `ordinal]=?, unit) =>
   pluralFormatOptions;
 
 type listFormatOptions;
@@ -71,8 +71,8 @@ type listFormatOptions;
 [@bs.obj]
 external listFormatOptions:
   (
-    ~style: [@bs.string] [ | `long | `short | `narrow]=?,
-    ~_type: [@bs.string] [ | `disjunction | `conjunction | `unit]=?,
+    ~style:  [ | `long | `short | `narrow]=?,
+    ~_type:  [ | `disjunction | `conjunction | `unit]=?,
     unit
   ) =>
   listFormatOptions;
@@ -82,9 +82,9 @@ type displayNameFormatOptions;
 [@bs.obj]
 external displayNameFormatOptions:
   (
-    ~style: [@bs.string] [ | `long | `short | `narrow]=?,
-    ~_type: [@bs.string] [ | `language | `region | `script | `currency]=?,
-    ~fallback: [@bs.string] [ | `code | `none]=?,
+    ~style:  [ | `long | `short | `narrow]=?,
+    ~_type:  [ | `language | `region | `script | `currency]=?,
+    ~fallback:  [ | `code | `none]=?,
     unit
   ) =>
   displayNameFormatOptions;
@@ -141,7 +141,7 @@ module Intl = {
     (
       t,
       float,
-      [@bs.string] [
+       [
         | `second
         | `minute
         | `hour
@@ -159,7 +159,7 @@ module Intl = {
     (
       t,
       float,
-      [@bs.string] [
+       [
         | `second
         | `minute
         | `hour
@@ -243,7 +243,7 @@ external createIntl: (intlConfig, intlCache) => Intl.t = "createIntl";
 
 module RawIntlProvider = {
   [@react.component] [@bs.module "react-intl"]
-  external make: (~value: Intl.t, ~children: React.element) => React.element =
+  external ake: (~value: Intl.t, ~children: React.element) => React.element =
     "RawIntlProvider";
 };
 
@@ -289,8 +289,8 @@ module FormattedDate = {
       ~formatMatcher: [@bs.string] [ | [@bs.as "best fit"] `bestFit | `basic]=?,
       ~timeZone: string=?,
       ~hour12: bool=?,
-      ~weekday: [@bs.string] [ | `narrow | `short | `long]=?,
-      ~era: [@bs.string] [ | `narrow | `short | `long]=?,
+      ~weekday:  [ | `narrow | `short | `long]=?,
+      ~era:  [ | `narrow | `short | `long]=?,
       ~year: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
       ~month: [@bs.string] [
                 | `numeric
@@ -304,7 +304,7 @@ module FormattedDate = {
       ~hour: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
       ~minute: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
       ~second: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
-      ~timeZoneName: [@bs.string] [ | `short | `long]=?,
+      ~timeZoneName:  [ | `short | `long]=?,
       ~format: string=?,
       ~children: (~formattedDate: string) => React.element=?
     ) =>
@@ -322,8 +322,8 @@ module FormattedDateParts = {
       ~formatMatcher: [@bs.string] [ | [@bs.as "best fit"] `bestFit | `basic]=?,
       ~timeZone: string=?,
       ~hour12: bool=?,
-      ~weekday: [@bs.string] [ | `narrow | `short | `long]=?,
-      ~era: [@bs.string] [ | `narrow | `short | `long]=?,
+      ~weekday:  [ | `narrow | `short | `long]=?,
+      ~era:  [ | `narrow | `short | `long]=?,
       ~year: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
       ~month: [@bs.string] [
                 | `numeric
@@ -337,7 +337,7 @@ module FormattedDateParts = {
       ~hour: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
       ~minute: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
       ~second: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
-      ~timeZoneName: [@bs.string] [ | `short | `long]=?,
+      ~timeZoneName:  [ | `short | `long]=?,
       ~format: string=?,
       ~children: (~formattedDateParts: array(part)) => React.element
     ) =>
@@ -355,8 +355,8 @@ module FormattedTime = {
       ~formatMatcher: [@bs.string] [ | [@bs.as "best fit"] `bestFit | `basic]=?,
       ~timeZone: string=?,
       ~hour12: bool=?,
-      ~weekday: [@bs.string] [ | `narrow | `short | `long]=?,
-      ~era: [@bs.string] [ | `narrow | `short | `long]=?,
+      ~weekday:  [ | `narrow | `short | `long]=?,
+      ~era:  [ | `narrow | `short | `long]=?,
       ~year: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
       ~month: [@bs.string] [
                 | `numeric
@@ -370,7 +370,7 @@ module FormattedTime = {
       ~hour: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
       ~minute: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
       ~second: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
-      ~timeZoneName: [@bs.string] [ | `short | `long]=?,
+      ~timeZoneName:  [ | `short | `long]=?,
       ~format: string=?,
       ~children: (~formattedTime: string) => React.element=?
     ) =>
@@ -388,8 +388,8 @@ module FormattedTimeParts = {
       ~formatMatcher: [@bs.string] [ | [@bs.as "best fit"] `bestFit | `basic]=?,
       ~timeZone: string=?,
       ~hour12: bool=?,
-      ~weekday: [@bs.string] [ | `narrow | `short | `long]=?,
-      ~era: [@bs.string] [ | `narrow | `short | `long]=?,
+      ~weekday:  [ | `narrow | `short | `long]=?,
+      ~era:  [ | `narrow | `short | `long]=?,
       ~year: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
       ~month: [@bs.string] [
                 | `numeric
@@ -403,7 +403,7 @@ module FormattedTimeParts = {
       ~hour: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
       ~minute: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
       ~second: [@bs.string] [ | `numeric | [@bs.as "2-digit"] `twoDigit]=?,
-      ~timeZoneName: [@bs.string] [ | `short | `long]=?,
+      ~timeZoneName:  [ | `short | `long]=?,
       ~format: string=?,
       ~children: (~formattedTimeParts: array(part)) => React.element
     ) =>
@@ -416,7 +416,7 @@ module FormattedRelativeTime = {
   external make:
     (
       ~value: float,
-      ~unit: [@bs.string] [
+      ~unit:  [
                | `second
                | `minute
                | `hour
@@ -427,8 +427,8 @@ module FormattedRelativeTime = {
                | `year
              ]
                =?,
-      ~numeric: [@bs.string] [ | `always | `auto]=?,
-      ~style: [@bs.string] [ | `long | `short | `narrow]=?,
+      ~numeric:  [ | `always | `auto]=?,
+      ~style:  [ | `long | `short | `narrow]=?,
       ~format: string=?,
       ~updateIntervalInSeconds: float=?,
       ~children: (~formattedDate: string) => React.element=?
@@ -444,9 +444,9 @@ module FormattedNumber = {
       ~value: float,
       ~localeMatcher: [@bs.string] [ | [@bs.as "best fit"] `bestFit | `lookup]
                         =?,
-      ~style: [@bs.string] [ | `decimal | `currency | `percent]=?,
+      ~style:  [ | `decimal | `currency | `percent]=?,
       ~currency: string=?,
-      ~currencyDisplay: [@bs.string] [ | `symbol | `code | `name]=?,
+      ~currencyDisplay:  [ | `symbol | `code | `name]=?,
       ~useGrouping: bool=?,
       ~minimumIntegerDigits: int=?,
       ~minimumFractionDigits: int=?,
@@ -467,9 +467,9 @@ module FormattedNumberParts = {
       ~value: float,
       ~localeMatcher: [@bs.string] [ | [@bs.as "best fit"] `bestFit | `lookup]
                         =?,
-      ~style: [@bs.string] [ | `decimal | `currency | `percent]=?,
+      ~style:  [ | `decimal | `currency | `percent]=?,
       ~currency: string=?,
-      ~currencyDisplay: [@bs.string] [ | `symbol | `code | `name]=?,
+      ~currencyDisplay:  [ | `symbol | `code | `name]=?,
       ~useGrouping: bool=?,
       ~minimumIntegerDigits: int=?,
       ~minimumFractionDigits: int=?,
@@ -488,7 +488,7 @@ module FormattedPlural = {
   external make:
     (
       ~value: int,
-      ~style: [@bs.string] [ | `cardinal | `ordinal]=?,
+      ~style:  [ | `cardinal | `ordinal]=?,
       ~other: React.element,
       ~zero: React.element=?,
       ~one: React.element=?,
@@ -506,8 +506,8 @@ module FormattedList = {
   external make:
     (
       ~value: array(string),
-      ~style: [@bs.string] [ | `long | `short | `narrow]=?,
-      ~_type: [@bs.string] [ | `disjunction | `conjunction | `unit]=?,
+      ~style:  [ | `long | `short | `narrow]=?,
+      ~_type:  [ | `disjunction | `conjunction | `unit]=?,
       ~children: (~formattedList: string) => React.element=?
     ) =>
     React.element =
@@ -519,9 +519,9 @@ module FormattedDisplayName = {
   external make:
     (
       ~value: string,
-      ~style: [@bs.string] [ | `long | `short | `narrow]=?,
-      ~_type: [@bs.string] [ | `language | `region | `script | `currency]=?,
-      ~fallback: [@bs.string] [ | `code | `none]=?
+      ~style:  [ | `long | `short | `narrow]=?,
+      ~_type:  [ | `language | `region | `script | `currency]=?,
+      ~fallback:  [ | `code | `none]=?
     ) =>
     React.element =
     "FormattedDisplayName";

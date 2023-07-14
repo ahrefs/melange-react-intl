@@ -1,6 +1,0 @@
-(library
- (name reactIntl)
- (public_name melange-react-intl.lib)
- (modes melange)
- (preprocess
-  (pps melange.ppx)))

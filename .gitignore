@@ -1,6 +1,5 @@
 node_modules/
 _opam/
-lib/
 dist/
 .cache
 .merlin
