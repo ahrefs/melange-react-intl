@@ -7,7 +7,7 @@ license: "MIT"
 homepage: "https://github.com/ahrefs/melange-react-intl-ppx"
 bug-reports: "https://github.com/ahrefs/melange-react-intl-ppx/issues"
 
-synopsis: "react-intl internationalization library binding and PPX reduce messages boilerplate code"
+synopsis: "react-intl internationalization library binding and PPX to reduce messages defenition boilerplate code"
 
 depends: [
   "ocaml" {>= "4.14.0"}
@@ -21,4 +21,4 @@ depends: [
   "melange" {with-dev-setup}
 ]
 
-build: [["dune" "build" "-p" "melange-react-intl.ppx"]]
+build: [["dune" "build" "-p" name "-j" jobs]]
