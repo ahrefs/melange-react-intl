@@ -1,8 +1,9 @@
 # History
 
-## Unreleased
+## 0.2.0
 
 - Migrate to opam and Melange
+- Include react-intl bindings to the package
 
 ## 0.1.1
 

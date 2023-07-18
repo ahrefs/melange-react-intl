@@ -1,6 +1,6 @@
 (library
  (name MelangeReactIntlPpx)
- (public_name melange-react-intl-ppx)
+ (public_name melange-react-intl.ppx)
  (libraries
   ppxlib
   reason
