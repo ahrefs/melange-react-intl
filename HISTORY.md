@@ -1,5 +1,8 @@
 # History
 
+## 0.2.1
+- Make intlConfig accept Js.Exn.t as onError parameter
+
 ## 0.2.0
 
 - Migrate to opam and Melange

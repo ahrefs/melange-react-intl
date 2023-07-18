@@ -233,7 +233,7 @@ external intlConfig:
     ~messages: Js.Dict.t(string),
     ~defaultLocale: string=?,
     ~defaultFormats: Js.t({..})=?, /* TODO */
-    ~onError: string => unit=?,
+    ~onError: Js.Exn.t => unit=?,
     unit
   ) =>
   intlConfig;
