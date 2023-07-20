@@ -15,7 +15,7 @@ depends: [
   "ppxlib" {>= "0.21.0"}
   "reason" {>= "3.7.0"}
   "re" {= "1.10.4"}
-  "reason-react" {= "0.11.0+20230626"}
+  "reason-react"
   "ocaml-lsp-server" {with-dev-setup}
   "ocamlformat" {with-dev-setup}
   "melange" {with-dev-setup}
