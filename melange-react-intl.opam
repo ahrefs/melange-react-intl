@@ -7,18 +7,43 @@ license: "MIT"
 homepage: "https://github.com/ahrefs/melange-react-intl-ppx"
 bug-reports: "https://github.com/ahrefs/melange-react-intl-ppx/issues"
 
-synopsis: "react-intl internationalization library binding and PPX to reduce messages defenition boilerplate code"
+synopsis: "react-intl internationalization library binding and PPX to reduce messages definition boilerplate code"
 
 depends: [
-  "ocaml" {>= "4.14.0"}
-  "dune" {>= "3.0"}
+  "ocaml"
+  "dune"
+  "melange" {>= "2.0.0"}
   "ppxlib" {>= "0.21.0"}
-  "reason" {>= "3.7.0"}
+  "reason" {>= "3.10.0"}
   "re" {= "1.10.4"}
   "reason-react"
-  "ocaml-lsp-server" {with-dev-setup}
-  "ocamlformat" {with-dev-setup}
-  "melange" {with-dev-setup}
+  "reason-react-ppx"
+  "ocaml-lsp-server" {with-test}
+  "ocamlformat" {with-test}
 ]
 
-build: [["dune" "build" "-p" name "-j" jobs]]
+build: [
+  ["dune" "subst"] {dev}
+  [
+    "dune"
+    "build"
+    "-p"
+    name
+    "-j"
+    jobs
+    "@install"
+    "@runtest" {with-test}
+    "@doc" {with-doc}
+  ]
+]
+
+depexts: [
+  ["react-intl"] {npm-version = "^6.4.4"}
+]
+
+pin-depends: [
+  [ "melange.2.0.0"         "git+https://github.com/melange-re/melange.git#e114ad55d185badeb32b3c766c9ab547495eac1b" ]
+  [ "reason.3.10.0"         "git+https://github.com/reasonml/reason.git#972261dab3b651ff8ab9b8b9fcc32940595073dc" ]
+  [ "reason-react.dev"      "git+https://github.com/reasonml/reason-react.git#2e99c8ee87cefe241b698c191c74226da54cf9db" ]
+  [ "reason-react-ppx.dev"  "git+https://github.com/reasonml/reason-react.git#2e99c8ee87cefe241b698c191c74226da54cf9db" ]
+]
