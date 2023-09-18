@@ -1,4 +1,5 @@
-(library
- (name Test)
- (modes melange)
- (libraries melange-react-intl-ppx))
+(melange.emit
+ (target test)
+ (libraries melange-react-intl.lib)
+ (preprocess
+  (pps melange.ppx melange-react-intl.ppx)))

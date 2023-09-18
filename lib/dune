@@ -4,4 +4,4 @@
  (libraries reason-react) 
  (modes melange)
  (preprocess
-  (pps melange.ppx reactjs-jsx-ppx)))
+  (pps melange.ppx reason-react-ppx)))

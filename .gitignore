@@ -14,3 +14,5 @@ _release
 *.byte
 *.native
 *.install
+
+.vscode
