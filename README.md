@@ -1,50 +1,56 @@
 # melange-react-intl
 
-This is a [react-intl](https://formatjs.io/docs/react-intl/) bindings for [Melange](https://melange.re/) and [preprocessor](https://ocaml.org/docs/metaprogramming) that eases the creation of messages.
+The [react-intl](https://formatjs.io/docs/react-intl/) bindings for
+[Melange](https://melange.re/) and a
+[preprocessor](https://ocaml.org/docs/metaprogramming) that eases the creation
+of translated messages.
 
 ## Installation
-Install [opam](https://opam.ocaml.org/) package manager.
-Then:
+
+Install the [opam](https://opam.ocaml.org/) package manager, and then run:
 
 ```shell
-opam pin add melange-react-intl-ppx.dev git+https://github.com/ahrefs/melange-react-intl-ppx.git#master
+opam pin add melange-react-intl.dev git+https://github.com/ahrefs/melange-react-intl.git#master
 ```
 
 ## Overview
 
-The package contains 2 parts:
-- Bindings to the react-intl library
-- The PPX which allows you to create `ReactIntl.messages` records without specifying `id`, which significantly reduces the amount of boilerplate code and simplifies the translation process.
+The package consists of two parts:
+- The bindings to the `react-intl` JavaScript library.
+- The PPX, which allows you to create `ReactIntl.messages` records without
+  specifying `id`, significantly reducing the amount of boilerplate code and
+  simplifying the translation process.
 
-Examples:
+### Examples
 
-This code
+This ReasonML code:
+
 ```reason
-let message: ReactIntl.message = [%intl "i am message"]
+let message: ReactIntl.message = [%intl "I am a message"];
 ```
 
-will be compiled to the (javascript):
+will be compiled to JavaScript as:
+
 ```javascript
 var message = {
   id: "168c9a2987fad481c5882847ac102aaf",
-  defaultMessage: "i am message"
+  defaultMessage: "I am a message"
 };
 ```
 
-Ppx also supports descripted messages:
+The PPX also supports messages with a description:
 
 ```reason
-let descriptedMessage: ReactIntl.message = [%intl {msg: "blabla", desc: "i am description"}]
+let withDescription: ReactIntl.message = [%intl {msg: "blabla", desc: "I am a description"}];
 ```
 
-## Usage with [rescript-react-intl](https://github.com/cca-io/rescript-react-intl)
+## Usage with the bindings
 
 ```reason
-// Some component
 [@react.component]
 let make = () => {
   let intl = ReactIntl.useIntl();
-  // helper functions
+  // Helper functions
   let l = message => intl->ReactIntl.Intl.formatMessage(message);
 
   <>
@@ -54,8 +60,8 @@ let make = () => {
 }
 ```
 
-
-You can define your own `FormattedMessage` component, which accepts `ReactIntl.message` instead of `id` and `defaultMessage`.
+You can define your own `FormattedMessage` component, which accepts a
+`ReactIntl.message` instead of `id` and `defaultMessage`:
 
 ```reason
 /// FormattedMessage.re
@@ -66,39 +72,57 @@ let make = (~item: ReactIntl.message, ~values: Js.t({..})) =>
 
 ## Draft phrases
 
-If you want to make [extactor](https://github.com/cca-io/rescript-react-intl-extractor) ignore some phrases, you can use `intl_draft` / `intl_draft.s`/ `intl_draft.el` extensions.
-It is helpful if you don't want some draft phrases (likely to change soon) to be sent to translators.
+If you want to make the
+[extractor](https://github.com/cca-io/rescript-react-intl-extractor) ignore some
+phrases, you can use `intl_draft`, `intl_draft.s`, or `intl_draft.el`
+extensions. This is helpful if you don't want some draft phrases (likely to
+change soon) to be sent to translators.
 
 ## Advanced usage
 
-There is an option to generate localized string straight from the ppx (without explicit helper functions usage).
-This option could be helpful for you if you don't need to change page language without page reloading.
+There is an option to generate a localized string straight from the PPX (without
+explicit helper functions usage). This option could be helpful if you don't need
+to change the page language without page reloading.
 
-- Ppx supports `intl.s` annotation:
+- Support for the `intl.s` annotation:
+
 ```reason
-let message: string = [%intl.s "i am message"] // type string
-```
-converts to ⬇️
-```reason
-let message: string = {id: "168c9a2987fad481c5882847ac102aaf", defaultMessage: "i am message"}->ReactIntPpxAdaptor.Message.to_s
-```
-- Ppx supports `intl.el` annotation:
-```reason
-let element: React.element = [%intl.el "i am message"]
-```
-converts to ⬇️
-```reason
-let element: React.element = {id: "168c9a2987fad481c5882847ac102aaf", defaultMessage: "i am message"}->ReactIntPpxAdaptor.Message.to_s->React.string
+let message: string = [%intl.s "I am a message"]; // type string
 ```
 
-- Ppx supports variables, plural forms and [rich text formatting](https://formatjs.io/docs/react-intl/components/#rich-text-formatting) in payload. In this case ppx will return function instead of ReactIntl.message
+Converts to ⬇️
+
 ```reason
-let element: React.element = [%intl.el "i am message with {variable}"]
+let message: string = {id: "168c9a2987fad481c5882847ac102aaf", defaultMessage: "I am a message"}->ReactIntPpxAdaptor.Message.to_s;
 ```
-converts to ⬇️
+
+- Support for the `intl.el` annotation:
+
+```reason
+let element: React.element = [%intl.el "I am a message"];
+```
+
+Converts to ⬇️
+
+```reason
+let element: React.element = {id: "168c9a2987fad481c5882847ac102aaf", defaultMessage: "I am a message"}->ReactIntPpxAdaptor.Message.to_s->React.string;
+```
+
+- Support for variables, plural forms, and [rich text
+  formatting](https://formatjs.io/docs/react-intl/components/#rich-text-formatting)
+  in payload. In this case, the PPX will return a function instead of
+  `ReactIntl.message`:
+
+```reason
+let element: React.element = [%intl.el "I am a message with {variable}"];
+```
+
+Converts to ⬇️
+
 ```reason
 let element: React.element =
-  (values: {. "variable": React.element}) => {id: "168c9a2987fad481c5kgmcntg5k3dsd5", defaultMessage: "i am message with {variable}"}->ReactIntPpxAdaptor.Message.format_to_s(_, values)->React.string
+  (values: {. "variable": React.element}) => {id: "168c9a2987fad481c5kgmcntg5k3dsd5", defaultMessage: "I am a message with {variable}"}->ReactIntPpxAdaptor.Message.format_to_s(_, values)->React.string;
 ```
 
-To use those features you have to define `ReactIntlPpxAdaptor` in your app (see test folder for details).
+To use these features, you have to define `ReactIntlPpxAdaptor` in your app (see
+the `test` folder for details).
