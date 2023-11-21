@@ -2,10 +2,10 @@ opam-version: "2.0"
 version: "git"
 maintainer: "Ahrefs"
 authors: "Ahrefs"
-dev-repo: "git+https://github.com/ahrefs/melange-react-intl-ppx.git"
+dev-repo: "git+https://github.com/ahrefs/melange-react-intl.git"
 license: "MIT"
-homepage: "https://github.com/ahrefs/melange-react-intl-ppx"
-bug-reports: "https://github.com/ahrefs/melange-react-intl-ppx/issues"
+homepage: "https://github.com/ahrefs/melange-react-intl"
+bug-reports: "https://github.com/ahrefs/melange-react-intl/issues"
 
 synopsis: "react-intl internationalization library binding and PPX to reduce messages definition boilerplate code"
 
