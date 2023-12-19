@@ -83,9 +83,14 @@ let parsePayload = (~loc, payload) =>
 let makeId = (~description="", message) =>
   message ++ "|" ++ description |> Digest.string |> Digest.to_hex;
 
+let tryUnescape = s =>
+  try(Scanf.unescaped(s)) {
+  | Scanf.Scan_failure(_err) => s
+  };
+
 let makeIntlRecord = (~payload, ~loc) => {
   let (message, messageExp, description) = parsePayload(~loc, payload);
-  let id = message |> Scanf.unescaped |> makeId(~description?);
+  let id = message |> tryUnescape |> makeId(~description?);
   let idExp = Ast_helper.Exp.constant(Pconst_string(id, loc, None));
   %expr
   [@warning "-45"]
