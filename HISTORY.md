@@ -1,5 +1,8 @@
 # History
 
+## 0.2.2
+- Unescape messages before building the id to match [the extractor behaviour](https://github.com/cca-io/rescript-react-intl-extractor/pull/83/files#diff-a536227426c32f9d1022eec01c9cc69ec7ef6ded0c3027bebd72b61f84fbe444R17)
+
 ## 0.2.1
 - Make intlConfig accept Js.Exn.t as onError parameter
 
