@@ -85,7 +85,7 @@ let makeId = (~description="", message) =>
 
 let makeIntlRecord = (~payload, ~loc) => {
   let (message, messageExp, description) = parsePayload(~loc, payload);
-  let id = makeId(~description?, message);
+  let id = message |> Scanf.unescaped |> makeId(~description?);
   let idExp = Ast_helper.Exp.constant(Pconst_string(id, loc, None));
   %expr
   [@warning "-45"]
