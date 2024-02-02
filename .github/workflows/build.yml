@@ -38,3 +38,6 @@ jobs:
 
       - name: Build everything
         run: make build
+
+      - name: Run tests
+        run: make test
