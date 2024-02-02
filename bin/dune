@@ -1,3 +1,6 @@
 (executable
- (name MelangeReactIntlPpxBin)
+ (name standalone)
+ (modules standalone)
+ (package melange-react-intl)
+ (public_name melange-react-intl-ppx)
  (libraries melange-react-intl.ppx ppxlib))

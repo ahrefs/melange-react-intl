@@ -1,0 +1,5 @@
+(cram
+ (deps
+  %{bin:melange-react-intl-ppx}
+  %{bin:refmt}
+  ppx.sh))
