@@ -50,3 +50,7 @@ watch: ## Watch for the filesystem and rebuild on every change
 .PHONY: test
 test: ## Run all tests
 	$(DUNE) test
+
+.PHONY: test-watch
+test-watch: ## Run all tests
+	$(DUNE) test --watch
