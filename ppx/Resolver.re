@@ -120,13 +120,30 @@ let makeValuesAsList = (~loc, variables) => {
            );
          let value =
            switch (type_.ptyp_desc) {
-           | Ptyp_constr({txt: Lident("int")}, []) =>
-             [%expr `Plural([%e access_values_object])]
            | Ptyp_constr({txt: Lident("string")}, []) =>
              [%expr `Variable([%e access_values_object])]
+           | Ptyp_constr({txt: Lident("int")}, []) =>
+             [%expr `Plural([%e access_values_object])]
            | Ptyp_constr({txt: Ldot(Lident("React"), "element")}, []) =>
              [%expr `Element([%e access_values_object])]
-           | _ => assert(false)
+           | Ptyp_arrow(_, core_type_arg, core_type_return) =>
+             switch (core_type_arg.ptyp_desc, core_type_return.ptyp_desc) {
+             | (
+                 Ptyp_constr({txt: Lident("string")}, []),
+                 Ptyp_constr({txt: Ldot(Lident("React"), "element")}, []),
+               ) =>
+               [%expr `Component([%e access_values_object])]
+             | _ =>
+               [%expr
+                [%ocaml.error
+                  "melange-react-intl: Unsupported rich text variable type, only string => React.element is supported"
+                ]]
+             }
+           | _ =>
+             [%expr
+              [%ocaml.error
+                "melange-react-intl: Unsupported variable type, only `string`, `int`, `React.element` or `string => React.element` are supported"
+              ]]
            };
          [%expr ([%e key], [%e value])];
        });
@@ -210,7 +227,7 @@ let makeReactElement = (~payload, ~loc) => {
        (values: Js.t([%t valuesType])) =>
          React.string(
            ReactIntlPpxAdaptor.Message.format_to_s(
-             ~list_as_values=[%e listAsValues],
+             ~list_of_values=[%e listAsValues],
              [%e recordExp],
              values,
            ),

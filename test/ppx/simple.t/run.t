@@ -92,6 +92,7 @@
     (values: {. "variable": React.element}) =>
       React.string(
         ReactIntlPpxAdaptor.Message.format_to_s(
+          ~list_of_values=[("variable", `Element(values#variable))],
           [@warning "-45"]
           ReactIntl.{
             id: "ac400e3c977990cd86a6981ad7eef8cd",
@@ -104,6 +105,7 @@
     (values: {. "itemsCount": int}) =>
       React.string(
         ReactIntlPpxAdaptor.Message.format_to_s(
+          ~list_of_values=[("itemsCount", `Plural(values#itemsCount))],
           [@warning "-45"]
           ReactIntl.{
             id: "a2926a901acebbdc606104ceae81dc82",
@@ -116,6 +118,7 @@
     (values: {. "a": string => React.element}) =>
       React.string(
         ReactIntlPpxAdaptor.Message.format_to_s(
+          ~list_of_values=[("a", `Component(values#a))],
           [@warning "-45"]
           ReactIntl.{
             id: "c1d9f720d6a89b19f574a7de2bf55f62",
