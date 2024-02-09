@@ -5,7 +5,6 @@ Basic case
   > EOF
 
   $ ./ppx.sh --output re input.re
-  $TESTCASE_ROOT
   (
     (values: {. "maxLength": React.element}) =>
       React.string(
@@ -35,7 +34,6 @@ With plural
   > EOF
 
   $ ./ppx.sh --output re input.re
-  $TESTCASE_ROOT
   let t =
     (
       (

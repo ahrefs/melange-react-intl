@@ -1,5 +1,4 @@
   $ ../ppx.sh --output re input.re
-  $TESTCASE_ROOT
   module ReactIntl = {
     type message = {
       id: string,
