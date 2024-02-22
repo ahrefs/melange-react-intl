@@ -189,10 +189,15 @@ let makeString = (~payload, ~loc) => {
   | [] => [%expr ReactIntlPpxAdaptor.Message.to_s([%e recordExp])]
   | variables =>
     let valuesType = variables |> makeValuesType(~loc);
+    let listAsValues = makeValuesAsList(~loc, variables);
     [%expr
      (
        (values: Js.t([%t valuesType])) => (
-         ReactIntlPpxAdaptor.Message.format_to_s([%e recordExp], values): string
+         ReactIntlPpxAdaptor.Message.format_to_s(
+           ~list_of_values=[%e listAsValues],
+           [%e recordExp],
+           values,
+         ): string
        )
      )];
   };
