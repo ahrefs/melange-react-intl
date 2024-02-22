@@ -112,11 +112,14 @@ let makeValuesAsList = (~loc, variables) => {
     variables
     |> List.map(((label, type_)) => {
          let key = Ast_helper.Exp.constant(Pconst_string(label, loc, None));
-         /* values#variable_name */
+         /* Here we read the field from the Js.t `values` with `##` (values##variable_name) */
          let access_values_object =
-           Ast_helper.Exp.send(
-             Ast_helper.Exp.ident({txt: Lident("values"), loc}),
-             {txt: label, loc},
+           Ast_helper.Exp.apply(
+             Ast_helper.Exp.ident({txt: Lident("##"), loc}),
+             [
+               (Nolabel, Ast_helper.Exp.ident({txt: Lident("values"), loc})),
+               (Nolabel, Ast_helper.Exp.ident({txt: Lident(label), loc})),
+             ],
            );
          let value =
            switch (type_.ptyp_desc) {
