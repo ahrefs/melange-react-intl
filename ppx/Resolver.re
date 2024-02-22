@@ -121,9 +121,9 @@ let makeValuesAsList = (~loc, variables) => {
          let value =
            switch (type_.ptyp_desc) {
            | Ptyp_constr({txt: Lident("string")}, []) =>
-             [%expr `Variable([%e access_values_object])]
+             [%expr `String([%e access_values_object])]
            | Ptyp_constr({txt: Lident("int")}, []) =>
-             [%expr `Plural([%e access_values_object])]
+             [%expr `Number([%e access_values_object])]
            | Ptyp_constr({txt: Ldot(Lident("React"), "element")}, []) =>
              [%expr `Element([%e access_values_object])]
            | Ptyp_arrow(_, core_type_arg, core_type_return) =>
