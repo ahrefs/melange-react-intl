@@ -8,7 +8,14 @@ module ReactIntl = {
 module ReactIntlPpxAdaptor = {
   module Message = {
     let to_s = (message: ReactIntl.message): string => message.defaultMessage;
-    let format_to_s = (message: ReactIntl.message, _values: Js.t({..})): string => message.defaultMessage;
+    let format_to_s =
+        (
+          ~list_of_values as _,
+          message: ReactIntl.message,
+          _values: Js.t({..}),
+        )
+        : string =>
+      message.defaultMessage;
   };
 };
 
