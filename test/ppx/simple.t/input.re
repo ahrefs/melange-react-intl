@@ -39,12 +39,32 @@ let descriptedElement3: React.element = [%intl.el
   {msg: "i am message", desc: "i am description"}
 ];
 
-let stringWithVariable: ({. "variable": string} => string) = [%intl.s "I am string with {variable}"];
+let stringWithVariable: {. "variable": string} => string = [%intl.s
+  "I am string with {variable}"
+];
 
-let stringWithPluralForm: ({. "itemsCount": int} => string) = [%intl.s "{itemsCount, plural, zero {item} one {item} few {items} many {items} other {items}}"];
+let stringWithPluralForm: {. "itemsCount": int} => string = [%intl.s
+  "{itemsCount, plural, zero {item} one {item} few {items} many {items} other {items}}"
+];
 
-let elementWithVariable: ({. "variable": React.element} => React.element) = [%intl.el "I am react element with {variable}"];
+let elementWithVariable: {. "variable": React.element} => React.element = [%intl.el
+  "I am react element with {variable}"
+];
 
-let elementWithPluralForm: ({. "itemsCount": int} => React.element) = [%intl.el "{itemsCount, plural, zero {item} one {item} few {items} many {items} other {items}}"];
+let elementWithPluralForm: {. "itemsCount": int} => React.element = [%intl.el
+  "{itemsCount, plural, zero {item} one {item} few {items} many {items} other {items}}"
+];
 
-let elementWithRichText: ({. "a": string => React.element} => React.element) = [%intl.el "Some text with <a>link text</a>"];
+let elementWithRichText: {. "a": string => React.element} => React.element = [%intl.el
+  "Some text with <a>link text</a>"
+];
+
+let cellText = (~powerUsersCount) => {
+  [%intl.el
+    {js|{powerUsersCountString} {powerUsersCount, plural, zero {Power users} one {Power user} few {Power users} other {Power users}}|js}
+  ] @@
+  {
+    "powerUsersCountString": powerUsersCount->RR.int,
+    "powerUsersCount": powerUsersCount,
+  };
+};

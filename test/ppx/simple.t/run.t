@@ -133,3 +133,36 @@
           values,
         ),
       );
+  let cellText = (~powerUsersCount) =>
+    (
+      (
+        values: {
+          .
+          "powerUsersCountString": React.element,
+          "powerUsersCount": int,
+        },
+      ) =>
+        React.string(
+          ReactIntlPpxAdaptor.Message.format_to_s(
+            ~list_of_values=[
+              (
+                (
+                  "powerUsersCountString",
+                  `Element(values##powerUsersCountString),
+                ),
+                ("powerUsersCount", `Number(values##powerUsersCount)),
+              ),
+            ],
+            [@warning "-45"]
+            ReactIntl.{
+              id: "f64fa55a351a8fe989d4fe05f15ec260",
+              defaultMessage: {js|{powerUsersCountString} {powerUsersCount, plural, zero {Power users} one {Power user} few {Power users} other {Power users}}|js},
+            },
+            values,
+          ),
+        )
+    ) @@
+    {
+      "powerUsersCountString": powerUsersCount->RR.int,
+      "powerUsersCount": powerUsersCount,
+    };
