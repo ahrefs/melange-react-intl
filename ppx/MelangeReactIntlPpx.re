@@ -1,5 +1,6 @@
 open Ppxlib;
 
+/* Given an expression, extract the right shape from a string or a record. This could be refactored into Ast_pattern. */
 let extractMessage = (~loc, expression) =>
   switch (expression.pexp_desc) {
   // Match a single string, which represents the "message"
@@ -46,6 +47,7 @@ let extractMessage = (~loc, expression) =>
   };
 
 let context_free_expression_tranform = (label, transform) => {
+  /* This pattern matches any single expression under a PStr */
   let single_expression_payload = Ast_pattern.(single_expr_payload(__));
 
   Context_free.Rule.extension(
