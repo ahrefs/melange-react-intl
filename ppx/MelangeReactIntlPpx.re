@@ -92,7 +92,7 @@ let () = {
       context_free_expression_tranform("intl_draft.el", (~loc, expression) => {
         let (messsage, messageExpr, description) =
           extractMessage(~loc, expression);
-        Resolver.makeIntlRecord(~loc, messsage, messageExpr, description);
+        Resolver.makeReactElement(~loc, messsage, messageExpr, description);
       }),
     ],
     "melange-react-intl.ppx",
