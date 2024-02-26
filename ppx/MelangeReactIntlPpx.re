@@ -2,14 +2,15 @@ open Ppxlib;
 
 let extractMessage = (~loc, expression) =>
   switch (expression.pexp_desc) {
-  // Match "message"
+  // Match a single string, which represents the "message"
   | Pexp_constant(Pconst_string(message, _, _)) => (
       message,
       expression,
       None,
     )
 
-  // Match {msg: "message", desc: "description"} and {desc: "description", msg: "message"}
+  // Match a record with "msg" and "desc" fields and extract the message and description
+  // Where the order doesn't matter: {msg: "message", desc: "description"} and {desc: "description", msg: "message"}
   | Pexp_record(
       [
         (
@@ -44,7 +45,7 @@ let extractMessage = (~loc, expression) =>
     )
   };
 
-let context_free_expression_tranform = (label, fn) => {
+let context_free_expression_tranform = (label, transform) => {
   let single_expression_payload = Ast_pattern.(single_expr_payload(__));
 
   Context_free.Rule.extension(
@@ -53,10 +54,8 @@ let context_free_expression_tranform = (label, fn) => {
       Extension.Context.expression,
       single_expression_payload,
       (~ctxt as _, expression) => {
-        let loc = expression.pexp_loc;
-        fn(~loc, expression);
-      },
-    ),
+      transform(~loc=expression.pexp_loc, expression)
+    }),
   );
 };
 
