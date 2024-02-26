@@ -5,11 +5,11 @@ Basic case
   > EOF
 
   $ ./ppx.sh --output re input.re
-  $TESTCASE_ROOT
   (
     (values: {. "maxLength": React.element}) =>
       React.string(
         ReactIntlPpxAdaptor.Message.format_to_s(
+          ~list_of_values=[("maxLength", `Element(values##maxLength))],
           [@warning "-45"]
           ReactIntl.{
             id: "52d92c9e4920f7e245381fad58360708",
@@ -34,7 +34,6 @@ With plural
   > EOF
 
   $ ./ppx.sh --output re input.re
-  $TESTCASE_ROOT
   let t =
     (
       (
@@ -45,6 +44,12 @@ With plural
         },
       ) => (
         ReactIntlPpxAdaptor.Message.format_to_s(
+          ~list_of_values=[
+            (
+              ("listName", `String(values##listName)),
+              ("keywordsCount", `Number(values##keywordsCount)),
+            ),
+          ],
           [@warning "-45"]
           ReactIntl.{
             id: "0df6b0b4831df770629c8980275ccf00",
