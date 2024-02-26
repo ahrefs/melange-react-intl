@@ -146,12 +146,10 @@
           ReactIntlPpxAdaptor.Message.format_to_s(
             ~list_of_values=[
               (
-                (
-                  "powerUsersCountString",
-                  `Element(values##powerUsersCountString),
-                ),
-                ("powerUsersCount", `Number(values##powerUsersCount)),
+                "powerUsersCountString",
+                `Element(values##powerUsersCountString),
               ),
+              ("powerUsersCount", `Number(values##powerUsersCount)),
             ],
             [@warning "-45"]
             ReactIntl.{

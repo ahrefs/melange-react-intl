@@ -45,10 +45,8 @@ With plural
       ) => (
         ReactIntlPpxAdaptor.Message.format_to_s(
           ~list_of_values=[
-            (
-              ("listName", `String(values##listName)),
-              ("keywordsCount", `Number(values##keywordsCount)),
-            ),
+            ("listName", `String(values##listName)),
+            ("keywordsCount", `Number(values##keywordsCount)),
           ],
           [@warning "-45"]
           ReactIntl.{

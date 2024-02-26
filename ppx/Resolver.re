@@ -107,6 +107,30 @@ let makeIntlRecord = (~payload, ~loc) => {
   {...expr, pexp_attributes: [warning_45(~loc)]};
 };
 
+let toList = (~loc, list_of_expr: list(expression)) => {
+  let rec toList' = list_of_expr => {
+    let nil = Ast_helper.Exp.construct({txt: Lident("[]"), loc}, None);
+    switch (list_of_expr) {
+    | [] => [%expr []]
+    | _ when List.length(list_of_expr) == 1 =>
+      let expr = List.hd(list_of_expr);
+      Ast_helper.Exp.construct(
+        {txt: Lident("::"), loc},
+        Some(Ast_helper.Exp.tuple([expr, nil])),
+      );
+    | _ =>
+      let expr = List.hd(list_of_expr);
+      let rest = List.tl(list_of_expr);
+      Ast_helper.Exp.construct(
+        {txt: Lident("::"), loc},
+        Some(Ast_helper.Exp.tuple([expr, toList'(rest)])),
+      );
+    };
+  };
+
+  toList'(list_of_expr);
+};
+
 let makeValuesAsList = (~loc, variables) => {
   let list_of_expr =
     variables
@@ -154,7 +178,7 @@ let makeValuesAsList = (~loc, variables) => {
          [%expr ([%e key], [%e value])];
        });
 
-  [%expr [[%e Ast_helper.Exp.tuple(list_of_expr)]]];
+  toList(~loc, list_of_expr);
 };
 let makeValuesType = (~loc, fields: list((string, core_type))): core_type => {
   let objectFields =
