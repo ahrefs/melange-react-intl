@@ -44,78 +44,55 @@ let extractMessage = (~loc, expression) =>
     )
   };
 
-module IntlRecord = {
-  let extractor = Ast_pattern.(single_expr_payload(__));
+let context_free_expression_tranform = (label, fn) => {
+  let single_expression_payload = Ast_pattern.(single_expr_payload(__));
 
-  let expression_handler = (~ctxt as _, expression) => {
-    let loc = expression.pexp_loc;
-    let (messsage, messageExpr, description) =
-      extractMessage(~loc, expression);
-    Resolver.makeIntlRecord(~loc, messsage, messageExpr, description);
-  };
-
-  let context_free = label =>
-    Context_free.Rule.extension(
-      Extension.V3.declare(
-        label,
-        Extension.Context.expression,
-        extractor,
-        expression_handler,
-      ),
-    );
-};
-
-module IntlString = {
-  let extractor = Ast_pattern.(single_expr_payload(__));
-
-  let expression_handler = (~ctxt as _, expression) => {
-    let loc = expression.pexp_loc;
-    let (messsage, messageExpr, description) =
-      extractMessage(~loc, expression);
-    Resolver.makeString(~loc, messsage, messageExpr, description);
-  };
-
-  let context_free = label =>
-    Context_free.Rule.extension(
-      Extension.V3.declare(
-        label,
-        Extension.Context.expression,
-        extractor,
-        expression_handler,
-      ),
-    );
-};
-
-module IntlReact = {
-  let extractor = Ast_pattern.(single_expr_payload(__));
-
-  let expression_handler = (~ctxt as _, expression) => {
-    let loc = expression.pexp_loc;
-    let (messsage, messageExpr, description) =
-      extractMessage(~loc, expression);
-    Resolver.makeReactElement(~loc, messsage, messageExpr, description);
-  };
-
-  let context_free = label =>
-    Context_free.Rule.extension(
-      Extension.V3.declare(
-        label,
-        Extension.Context.expression,
-        extractor,
-        expression_handler,
-      ),
-    );
+  Context_free.Rule.extension(
+    Extension.V3.declare(
+      label,
+      Extension.Context.expression,
+      single_expression_payload,
+      (~ctxt as _, expression) => {
+        let loc = expression.pexp_loc;
+        fn(~loc, expression);
+      },
+    ),
+  );
 };
 
 let () = {
   Driver.V2.register_transformation(
     ~rules=[
-      IntlRecord.context_free("intl"),
-      IntlRecord.context_free("intl_draft"),
-      IntlString.context_free("intl.s"),
-      IntlString.context_free("intl_draft.s"),
-      IntlReact.context_free("intl.el"),
-      IntlReact.context_free("intl_draft.el"),
+      context_free_expression_tranform("intl", (~loc, expression) => {
+        let (messsage, messageExpr, description) =
+          extractMessage(~loc, expression);
+        Resolver.makeIntlRecord(~loc, messsage, messageExpr, description);
+      }),
+      context_free_expression_tranform("intl_draft", (~loc, expression) => {
+        let (messsage, messageExpr, description) =
+          extractMessage(~loc, expression);
+        Resolver.makeIntlRecord(~loc, messsage, messageExpr, description);
+      }),
+      context_free_expression_tranform("intl.s", (~loc, expression) => {
+        let (messsage, messageExpr, description) =
+          extractMessage(~loc, expression);
+        Resolver.makeString(~loc, messsage, messageExpr, description);
+      }),
+      context_free_expression_tranform("intl_draft.s", (~loc, expression) => {
+        let (messsage, messageExpr, description) =
+          extractMessage(~loc, expression);
+        Resolver.makeString(~loc, messsage, messageExpr, description);
+      }),
+      context_free_expression_tranform("intl.el", (~loc, expression) => {
+        let (messsage, messageExpr, description) =
+          extractMessage(~loc, expression);
+        Resolver.makeReactElement(~loc, messsage, messageExpr, description);
+      }),
+      context_free_expression_tranform("intl_draft.el", (~loc, expression) => {
+        let (messsage, messageExpr, description) =
+          extractMessage(~loc, expression);
+        Resolver.makeIntlRecord(~loc, messsage, messageExpr, description);
+      }),
     ],
     "melange-react-intl.ppx",
   );
