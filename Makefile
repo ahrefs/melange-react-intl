@@ -50,11 +50,3 @@ watch: ## Watch for the filesystem and rebuild on every change
 .PHONY: test
 test: ## Run all tests
 	$(DUNE) test
-
-.PHONY: test-watch
-test-watch: ## Run all tests in watch mode
-	$(DUNE) test --watch
-
-.PHONY: test-promote
-test-promote: ## Promote all snapshot tests
-	$(DUNE) test --auto-promote
