@@ -129,10 +129,11 @@ let makeString = (~loc, message, messageExp, description) => {
     ReactIntlPpxAdaptor.Message.to_s([%e recordExp])
   | variables =>
     let valuesType = variables |> makeValuesType(~loc);
+    let list_of_values = variables |> makeValuesAsList(~loc);
     %expr
     (
       (values: Js.t([%t valuesType])) => (
-        ReactIntlPpxAdaptor.Message.format_to_s([%e recordExp], values): string
+        ReactIntlPpxAdaptor.Message.format_to_s(~list_of_values=[%e list_of_values], [%e recordExp], values): string
       )
     );
   };
@@ -161,11 +162,12 @@ let makeReactElement = (~loc, message, messageExp, description) => {
     React.string(ReactIntlPpxAdaptor.Message.to_s([%e recordExp]))
   | variables =>
     let valuesType = variables |> makeValuesType(~loc);
+    let list_of_values = variables |> makeValuesAsList(~loc);
     %expr
     (
       (values: Js.t([%t valuesType])) =>
         React.string(
-          ReactIntlPpxAdaptor.Message.format_to_s([%e recordExp], values)
+          ReactIntlPpxAdaptor.Message.format_to_s(~list_of_values=[%e list_of_values], [%e recordExp], values)
         )
     );
   };
