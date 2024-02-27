@@ -1,10 +1,7 @@
 (library
  (name MelangeReactIntlPpx)
  (public_name melange-react-intl.ppx)
- (libraries
-  ppxlib
-  reason
-  re) 
+ (libraries ppxlib re)
  (flags
   (:standard -w -9))
  (kind ppx_rewriter)
