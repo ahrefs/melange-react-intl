@@ -1,20 +1,23 @@
-module ReactIntl = {
-  type message = {
-    id: string,
-    defaultMessage: string,
-  };
-};
-
 module ReactIntlPpxAdaptor = {
   module Message = {
     let to_s = (message: ReactIntl.message): string => message.defaultMessage;
-    let format_to_s = (message: ReactIntl.message, _values: Js.t({..})): string => message.defaultMessage;
+    let format_to_s =
+        (
+          ~list_of_values as _: list((string, ReactIntl.value)),
+          message: ReactIntl.message,
+          _values: Js.t({..}),
+        )
+        : string =>
+      message.defaultMessage;
+    let format_to_el =
+        (
+          ~list_of_values as _: list((string, ReactIntl.value)),
+          message: ReactIntl.message,
+          _values: Js.t({..}),
+        )
+        : React.element =>
+      React.string(message.defaultMessage);
   };
-};
-
-module React = {
-  type element;
-  external string: string => element = "%identity";
 };
 
 let message: ReactIntl.message = [%intl "i am message"];
@@ -32,12 +35,22 @@ let descriptedElement3: React.element = [%intl.el
   {msg: "i am message", desc: "i am description"}
 ];
 
-let stringWithVariable: ({. "variable": string} => string) = [%intl.s "I am string with {variable}"];
+let stringWithVariable: {. "variable": string} => string = [%intl.s
+  "I am string with {variable}"
+];
 
-let stringWithPluralForm: ({. "itemsCount": int} => string) = [%intl.s "{itemsCount, plural, zero {item} one {item} few {items} many {items} other {items}}"];
+let stringWithPluralForm: {. "itemsCount": int} => string = [%intl.s
+  "{itemsCount, plural, zero {item} one {item} few {items} many {items} other {items}}"
+];
 
-let elementWithVariable: ({. "variable": React.element} => React.element) = [%intl.el "I am react element with {variable}"];
+let elementWithVariable: {. "variable": React.element} => React.element = [%intl.el
+  "I am react element with {variable}"
+];
 
-let elementWithPluralForm: ({. "itemsCount": int} => React.element) = [%intl.el "{itemsCount, plural, zero {item} one {item} few {items} many {items} other {items}}"];
+let elementWithPluralForm: {. "itemsCount": int} => React.element = [%intl.el
+  "{itemsCount, plural, zero {item} one {item} few {items} many {items} other {items}}"
+];
 
-let elementWithRichText: ({. "a": string => React.element} => React.element) = [%intl.el "Some text with <a>link text</a>"];
+let elementWithRichText: {. "a": string => React.element} => React.element = [%intl.el
+  "Some text with <a>link text</a>"
+];

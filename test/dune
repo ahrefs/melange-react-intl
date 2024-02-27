@@ -1,5 +1,5 @@
 (melange.emit
  (target test)
- (libraries melange-react-intl.lib)
+ (libraries melange-react-intl.lib reason-react)
  (preprocess
   (pps melange.ppx melange-react-intl.ppx)))
