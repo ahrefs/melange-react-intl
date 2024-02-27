@@ -142,20 +142,17 @@ let makeReactElement = (~loc, message, messageExp, description) => {
   let variables = simpleVariables @ pluralVariables @ richTextVariables;
 
   switch (variables) {
-  | [] =>
-    [%expr React.string(ReactIntlPpxAdaptor.Message.to_s([%e recordExp]))]
+  | [] => [%expr ReactIntlPpxAdaptor.Message.to_s([%e recordExp])]
   | variables =>
     let valuesType = variables |> makeValuesType(~loc);
     let listAsValues = makeValuesAsList(~loc, variables);
     [%expr
      (
        (values: Js.t([%t valuesType])) =>
-         React.string(
-           ReactIntlPpxAdaptor.Message.format_to_s(
-             ~list_of_values=[%e listAsValues],
-             [%e recordExp],
-             values,
-           ),
+         ReactIntlPpxAdaptor.Message.format_to_s(
+           ~list_of_values=[%e listAsValues],
+           [%e recordExp],
+           values,
          )
      )];
   };
