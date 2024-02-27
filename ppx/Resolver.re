@@ -1,4 +1,5 @@
 open Ppxlib;
+module Builder = Ppxlib.Ast_builder.Default;
 
 let makeId = (~description="", message) =>
   message ++ "|" ++ description |> Digest.string |> Digest.to_hex;
@@ -8,12 +9,21 @@ let tryUnescape = s =>
   | Scanf.Scan_failure(_err) => s
   };
 
+let warning_45 = (~loc) =>
+  Builder.attribute(
+    ~loc,
+    ~name={Location.loc, txt: "warning"},
+    ~payload=
+      PStr([Builder.pstr_eval(~loc, Builder.estring(~loc, "-45"), [])]),
+  );
+
 let makeIntlRecord = (~loc, message, messageExp, description) => {
   let id = message |> tryUnescape |> makeId(~description?);
   let idExp = Ast_helper.Exp.constant(Pconst_string(id, loc, None));
-  %expr
-  [@warning "-45"]
-  ReactIntl.{id: [%e idExp], defaultMessage: [%e messageExp]};
+  let expr = [%expr
+    ReactIntl.{id: [%e idExp], defaultMessage: [%e messageExp]}
+  ];
+  {...expr, pexp_attributes: [warning_45(~loc)]};
 };
 
 let toList = (~loc, list_of_expr: list(expression)) => {
@@ -124,18 +134,20 @@ let makeString = (~loc, message, messageExp, description) => {
   let variables = simpleVariables @ pluralVariables;
 
   switch (variables) {
-  | [] =>
-    %expr
-    ReactIntlPpxAdaptor.Message.to_s([%e recordExp])
+  | [] => [%expr ReactIntlPpxAdaptor.Message.to_s([%e recordExp])]
   | variables =>
     let valuesType = variables |> makeValuesType(~loc);
     let list_of_values = variables |> makeValuesAsList(~loc);
-    %expr
-    (
-      (values: Js.t([%t valuesType])) => (
-        ReactIntlPpxAdaptor.Message.format_to_s(~list_of_values=[%e list_of_values], [%e recordExp], values): string
-      )
-    );
+    [%expr
+     (
+       (values: Js.t([%t valuesType])) => (
+         ReactIntlPpxAdaptor.Message.format_to_s(
+           ~list_of_values=[%e list_of_values],
+           [%e recordExp],
+           values,
+         ): string
+       )
+     )];
   };
 };
 
@@ -158,17 +170,20 @@ let makeReactElement = (~loc, message, messageExp, description) => {
 
   switch (variables) {
   | [] =>
-    %expr
-    React.string(ReactIntlPpxAdaptor.Message.to_s([%e recordExp]))
+    [%expr React.string(ReactIntlPpxAdaptor.Message.to_s([%e recordExp]))]
   | variables =>
     let valuesType = variables |> makeValuesType(~loc);
     let list_of_values = variables |> makeValuesAsList(~loc);
-    %expr
-    (
-      (values: Js.t([%t valuesType])) =>
-        React.string(
-          ReactIntlPpxAdaptor.Message.format_to_s(~list_of_values=[%e list_of_values], [%e recordExp], values)
-        )
-    );
+    [%expr
+     (
+       (values: Js.t([%t valuesType])) =>
+         React.string(
+           ReactIntlPpxAdaptor.Message.format_to_s(
+             ~list_of_values=[%e list_of_values],
+             [%e recordExp],
+             values,
+           ),
+         )
+     )];
   };
 };
