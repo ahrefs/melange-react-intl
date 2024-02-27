@@ -1,29 +1,3 @@
-module ReactIntl = {
-  type message = {
-    id: string,
-    defaultMessage: string,
-  };
-};
-
-module ReactIntlPpxAdaptor = {
-  module Message = {
-    let to_s = (message: ReactIntl.message): string => message.defaultMessage;
-    let format_to_s =
-        (
-          ~list_of_values as _,
-          message: ReactIntl.message,
-          _values: Js.t({..}),
-        )
-        : string =>
-      message.defaultMessage;
-  };
-};
-
-module React = {
-  type element;
-  external string: string => element = "%identity";
-};
-
 let message: ReactIntl.message = [%intl "i am message"];
 let descriptedMessage: ReactIntl.message = [%intl
   {msg: "i am message", desc: "i am description"}
