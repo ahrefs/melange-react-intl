@@ -1,85 +1,5 @@
 open Ppxlib;
 
-let parsePayload = (~loc, payload) =>
-  switch (payload) {
-  // Match "message"
-  | PStr([
-      {
-        pstr_desc:
-          Pstr_eval(
-            {pexp_desc: Pexp_constant(Pconst_string(message, _, _)), _} as messageExp,
-            _,
-          ),
-      },
-    ]) => (
-      message,
-      messageExp,
-      None,
-    )
-
-  // Match {msg: "message", desc: "description"} and {desc: "description", msg: "message"}
-  | PStr([
-      {
-        pstr_desc:
-          Pstr_eval(
-            {
-              pexp_desc:
-                Pexp_record(
-                  [
-                    (
-                      {txt: Lident("msg"), _},
-                      {
-                        pexp_desc:
-                          Pexp_constant(Pconst_string(message, _, _)),
-                        _,
-                      } as messageExp,
-                    ),
-                    (
-                      {txt: Lident("desc"), _},
-                      {
-                        pexp_desc:
-                          Pexp_constant(Pconst_string(description, _, _)),
-                        _,
-                      },
-                    ),
-                  ] |
-                  [
-                    (
-                      {txt: Lident("desc"), _},
-                      {
-                        pexp_desc:
-                          Pexp_constant(Pconst_string(description, _, _)),
-                        _,
-                      },
-                    ),
-                    (
-                      {txt: Lident("msg"), _},
-                      {
-                        pexp_desc:
-                          Pexp_constant(Pconst_string(message, _, _)),
-                        _,
-                      } as messageExp,
-                    ),
-                  ],
-                  None,
-                ),
-              _,
-            },
-            _,
-          ),
-      },
-    ]) => (
-      message,
-      messageExp,
-      Some(description),
-    )
-  | _ =>
-    Location.raise_errorf(
-      ~loc,
-      "react-intl-ppx expects the extension payload to be a constant string or a record ({msg: string, desc: string}), it does not work with any other expression types.",
-    )
-  };
-
 let makeId = (~description="", message) =>
   message ++ "|" ++ description |> Digest.string |> Digest.to_hex;
 
@@ -88,8 +8,7 @@ let tryUnescape = s =>
   | Scanf.Scan_failure(_err) => s
   };
 
-let makeIntlRecord = (~payload, ~loc) => {
-  let (message, messageExp, description) = parsePayload(~loc, payload);
+let makeIntlRecord = (~loc, message, messageExp, description) => {
   let id = message |> tryUnescape |> makeId(~description?);
   let idExp = Ast_helper.Exp.constant(Pconst_string(id, loc, None));
   %expr
@@ -116,9 +35,8 @@ let makeValuesType = (~loc, fields: list((string, core_type))): core_type => {
   };
 };
 
-let makeString = (~payload, ~loc) => {
-  let recordExp = makeIntlRecord(~payload, ~loc);
-  let (message, _messageExp, _description) = parsePayload(~loc, payload);
+let makeString = (~loc, message, messageExp, description) => {
+  let recordExp = makeIntlRecord(~loc, message, messageExp, description);
   let pluralVariables =
     message
     |> Regexp.findAll(~regexp=Regexp.plural)
@@ -147,9 +65,8 @@ let makeString = (~payload, ~loc) => {
   };
 };
 
-let makeReactElement = (~payload, ~loc) => {
-  let recordExp = makeIntlRecord(~payload, ~loc);
-  let (message, _messageExp, _description) = parsePayload(~loc, payload);
+let makeReactElement = (~loc, message, messageExp, description) => {
+  let recordExp = makeIntlRecord(~loc, message, messageExp, description);
   let pluralVariables =
     message
     |> Regexp.findAll(~regexp=Regexp.plural)

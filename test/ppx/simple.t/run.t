@@ -1,5 +1,4 @@
   $ ../ppx.sh --output re input.re
-  $TESTCASE_ROOT
   module ReactIntl = {
     type message = {
       id: string,
@@ -10,7 +9,12 @@
     module Message = {
       let to_s = (message: ReactIntl.message): string => message.defaultMessage;
       let format_to_s =
-          (message: ReactIntl.message, _values: Js.t({..})): string =>
+          (
+            ~list_of_values as _,
+            message: ReactIntl.message,
+            _values: Js.t({..}),
+          )
+          : string =>
         message.defaultMessage;
     };
   };
@@ -124,3 +128,27 @@
           values,
         ),
       );
+  let cellText = (~powerUsersCount) =>
+    (
+      (
+        values: {
+          .
+          "powerUsersCountString": React.element,
+          "powerUsersCount": int,
+        },
+      ) =>
+        React.string(
+          ReactIntlPpxAdaptor.Message.format_to_s(
+            [@warning "-45"]
+            ReactIntl.{
+              id: "f64fa55a351a8fe989d4fe05f15ec260",
+              defaultMessage: {js|{powerUsersCountString} {powerUsersCount, plural, zero {Power users} one {Power user} few {Power users} other {Power users}}|js},
+            },
+            values,
+          ),
+        )
+    ) @@
+    {
+      "powerUsersCountString": powerUsersCount->RR.int,
+      "powerUsersCount": powerUsersCount,
+    };
