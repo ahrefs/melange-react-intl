@@ -16,6 +16,14 @@ module ReactIntlPpxAdaptor = {
         )
         : string =>
       message.defaultMessage;
+    let format_to_el =
+        (
+          ~list_of_values as _,
+          message: ReactIntl.message,
+          _values: Js.t({..}),
+        )
+        : React.element =>
+      React.string(message.defaultMessage);
   };
 };
 
