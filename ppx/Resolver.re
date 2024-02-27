@@ -176,14 +176,14 @@ let makeReactElement = (~loc, message, messageExp, description) => {
     let list_of_values = variables |> makeValuesAsList(~loc);
     [%expr
      (
-       (values: Js.t([%t valuesType])) =>
-         React.string(
-           ReactIntlPpxAdaptor.Message.format_to_s(
+       (
+         (values: Js.t([%t valuesType])) =>
+           ReactIntlPpxAdaptor.Message.format_to_el(
              ~list_of_values=[%e list_of_values],
              [%e recordExp],
              values,
-           ),
-         )
+           )
+       ): React.element
      )];
   };
 };

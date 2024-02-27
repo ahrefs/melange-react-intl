@@ -7,17 +7,15 @@ Basic case
   $ ./ppx.sh --output re input.re
   (
     (values: {. "maxLength": React.element}) =>
-      React.string(
-        ReactIntlPpxAdaptor.Message.format_to_s(
-          ~list_of_values=[("maxLength", `Element(values##maxLength))],
-          [@warning "-45"]
-          ReactIntl.{
-            id: "52d92c9e4920f7e245381fad58360708",
-            defaultMessage: {js|{maxLength} characters maximum|js},
-          },
-          values,
-        ),
-      )
+      ReactIntlPpxAdaptor.Message.format_to_el(
+        ~list_of_values=[("maxLength", `Element(values##maxLength))],
+        [@warning "-45"]
+        ReactIntl.{
+          id: "52d92c9e4920f7e245381fad58360708",
+          defaultMessage: {js|{maxLength} characters maximum|js},
+        },
+        values,
+      ): React.element
   ) @@
   {"maxLength": length->NumFormat.Int.format->RR.s};
 
