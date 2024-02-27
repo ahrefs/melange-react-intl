@@ -71,7 +71,7 @@
         values,
       ): string
     );
-  let elementWithVariable: {. "variable": React.element} => React.element = (
+  let elementWithVariable: {. "variable": React.element} => React.element =
     (values: {. "variable": React.element}) =>
       ReactIntlPpxAdaptor.Message.format_to_el(
         ~list_of_values=[("variable", `Element(values##variable))],
@@ -81,9 +81,8 @@
           defaultMessage: "I am react element with {variable}",
         },
         values,
-      ): React.element
-  );
-  let elementWithPluralForm: {. "itemsCount": int} => React.element = (
+      );
+  let elementWithPluralForm: {. "itemsCount": int} => React.element =
     (values: {. "itemsCount": int}) =>
       ReactIntlPpxAdaptor.Message.format_to_el(
         ~list_of_values=[("itemsCount", `Number(values##itemsCount))],
@@ -93,9 +92,8 @@
           defaultMessage: "{itemsCount, plural, zero {item} one {item} few {items} many {items} other {items}}",
         },
         values,
-      ): React.element
-  );
-  let elementWithRichText: {. "a": string => React.element} => React.element = (
+      );
+  let elementWithRichText: {. "a": string => React.element} => React.element =
     (values: {. "a": string => React.element}) =>
       ReactIntlPpxAdaptor.Message.format_to_el(
         ~list_of_values=[("a", `Component(values##a))],
@@ -105,8 +103,7 @@
           defaultMessage: "Some text with <a>link text</a>",
         },
         values,
-      ): React.element
-  );
+      );
   let cellText = (~powerUsersCount) =>
     (
       (
@@ -127,7 +124,7 @@
             defaultMessage: {js|{powerUsersCountString} {powerUsersCount, plural, zero {Power users} one {Power user} few {Power users} other {Power users}}|js},
           },
           values,
-        ): React.element
+        )
     ) @@
     {
       "powerUsersCountString": powerUsersCount->RR.int,

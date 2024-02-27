@@ -15,7 +15,7 @@ Basic case
           defaultMessage: {js|{maxLength} characters maximum|js},
         },
         values,
-      ): React.element
+      )
   ) @@
   {"maxLength": length->NumFormat.Int.format->RR.s};
 
