@@ -130,3 +130,36 @@
       "powerUsersCountString": powerUsersCount->RR.int,
       "powerUsersCount": powerUsersCount,
     };
+  let elementWithNestedTags =
+      (
+        values: {
+          .
+          "a": string => React.element,
+          "li": string => React.element,
+          "p": string => React.element,
+          "ul": string => React.element,
+        },
+      ) =>
+    ReactIntlPpxAdaptor.Message.format_to_el(
+      ~list_of_values=[
+        ("a", `Component(values##a)),
+        ("li", `Component(values##li)),
+        ("p", `Component(values##p)),
+        ("ul", `Component(values##ul)),
+      ],
+      [@warning "-45"]
+      ReactIntl.{
+        id: "33088cac6fe90955923da0de98805ab6",
+        defaultMessage: {js|
+    <ul>
+      <li>one</li>
+      <li>two</li>
+    </ul>
+    <opentag>
+    <p>
+      <a href="https://ocaml.com">link text</a>.
+    </p>
+  |js},
+      },
+      values,
+    );
