@@ -158,13 +158,14 @@ let makeReactElement = (~loc, message, messageExp, description) => {
     |> Regexp.findAll(~regexp=Regexp.plural)
     |> List.map(label => (label, [%type: int]));
   let cleanedMessage = message |> Regexp.remove(~regexp=Regexp.plural);
+  
   let simpleVariables =
     cleanedMessage
     |> Regexp.findAll(~regexp=Regexp.variable)
     |> List.map(label => (label, [%type: React.element]));
   let richTextVariables =
     cleanedMessage
-    |> Regexp.findAll(~regexp=Regexp.richText)
+    |> Regexp.extractTagNames
     |> List.map(label => (label, [%type: string => React.element]));
   let variables = simpleVariables @ pluralVariables @ richTextVariables;
 

@@ -42,3 +42,13 @@ let cellText = (~powerUsersCount) => {
     "powerUsersCount": powerUsersCount,
   };
 };
+let elementWithNestedTags = [%intl.el {js|
+  <ul>
+    <li>one</li>
+    <li>two</li>
+  </ul>
+  <opentag>
+  <p>
+    <a href="https://ocaml.com">link text</a>.
+  </p>
+|js}];
