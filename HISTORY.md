@@ -1,5 +1,8 @@
 # History
 
+## 0.3.0
+- Removed intl_draft.* extension nodes
+
 ## 0.2.4
 - Add nested tags support for rich text messages
 

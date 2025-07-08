@@ -69,27 +69,12 @@ let () = {
           extractMessage(~loc, expression);
         Resolver.makeIntlRecord(~loc, messsage, messageExpr, description);
       }),
-      context_free_expression_tranform("intl_draft", (~loc, expression) => {
-        let (messsage, messageExpr, description) =
-          extractMessage(~loc, expression);
-        Resolver.makeIntlRecord(~loc, messsage, messageExpr, description);
-      }),
       context_free_expression_tranform("intl.s", (~loc, expression) => {
         let (messsage, messageExpr, description) =
           extractMessage(~loc, expression);
         Resolver.makeString(~loc, messsage, messageExpr, description);
       }),
-      context_free_expression_tranform("intl_draft.s", (~loc, expression) => {
-        let (messsage, messageExpr, description) =
-          extractMessage(~loc, expression);
-        Resolver.makeString(~loc, messsage, messageExpr, description);
-      }),
       context_free_expression_tranform("intl.el", (~loc, expression) => {
-        let (messsage, messageExpr, description) =
-          extractMessage(~loc, expression);
-        Resolver.makeReactElement(~loc, messsage, messageExpr, description);
-      }),
-      context_free_expression_tranform("intl_draft.el", (~loc, expression) => {
         let (messsage, messageExpr, description) =
           extractMessage(~loc, expression);
         Resolver.makeReactElement(~loc, messsage, messageExpr, description);
