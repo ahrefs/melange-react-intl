@@ -1,5 +1,8 @@
 # History
 
+## 0.4.0
+- Add width field to ppx
+
 ## 0.3.0
 - Removed intl_draft.* extension nodes
 
