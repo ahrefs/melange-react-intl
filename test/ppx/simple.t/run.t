@@ -27,6 +27,14 @@
         defaultMessage: "i am message",
       },
     );
+  let undescriptedmessage: string =
+    ReactIntlPpxAdaptor.Message.to_s(
+      [@warning "-45"]
+      ReactIntl.{
+        id: "24ac19a52c2b0192688fa8294d28dbae",
+        defaultMessage: "i am message",
+      },
+    );
   let element3: React.element =
     React.string(
       ReactIntlPpxAdaptor.Message.to_s(

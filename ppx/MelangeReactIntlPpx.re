@@ -40,9 +40,9 @@ let extractMessage = (~loc, expression) =>
     );
 
     // Validate that required fields are present
-    switch (msgField^, descField^) {
-    | (Some((message, messageExp)), desc) => (message, messageExp, desc)
-    | (None, _) => Location.raise_errorf(~loc, "react-intl-ppx requires a 'msg' field in the record")
+    switch (msgField^) {
+    | Some((message, messageExp)) => (message, messageExp, descField^)
+    | None => Location.raise_errorf(~loc, "react-intl-ppx requires a 'msg' field in the record")
     };
 
   | _ =>
