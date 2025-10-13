@@ -188,7 +188,7 @@
   let messageWithWidth: ReactIntl.message =
     [@warning "-45"]
     ReactIntl.{
-      id: "274914014c3b8925fac6cd7e5148a885",
+      id: "4907e793cbf4bfa0bcbfe07c8d2935da",
       defaultMessage: "i am message with width",
       width: Some(80),
     };
