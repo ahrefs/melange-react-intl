@@ -63,3 +63,11 @@ let elementWithNestedTags = [%intl.el
   </p>
 |js}
 ];
+
+let messageWithWidth: ReactIntl.message = [%intl
+  {
+    msg: "i am message with width",
+    desc: "example description",
+    width: 80,
+  }
+];

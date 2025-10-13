@@ -17,11 +17,16 @@ let warning_45 = (~loc) =>
       PStr([Builder.pstr_eval(~loc, Builder.estring(~loc, "-45"), [])]),
   );
 
-let makeIntlRecord = (~loc, message, messageExp, description) => {
+let makeIntlRecord = (~loc, message, messageExp, description, width) => {
   let id = message |> tryUnescape |> makeId(~description?);
   let idExp = Ast_helper.Exp.constant(Pconst_string(id, loc, None));
+  let widthExp =
+    switch (width) {
+    | None => [%expr None]
+    | Some(w) => [%expr Some([%e Ast_helper.Exp.constant(Pconst_integer(string_of_int(w), None))])]
+    };
   let expr = [%expr
-    ReactIntl.{id: [%e idExp], defaultMessage: [%e messageExp]}
+    ReactIntl.{id: [%e idExp], defaultMessage: [%e messageExp], width: [%e widthExp]}
   ];
   {...expr, pexp_attributes: [warning_45(~loc)]};
 };
@@ -118,8 +123,8 @@ let makeValuesType = (~loc, fields: list((string, core_type))): core_type => {
   };
 };
 
-let makeString = (~loc, message, messageExp, description) => {
-  let recordExp = makeIntlRecord(~loc, message, messageExp, description);
+let makeString = (~loc, message, messageExp, description, width) => {
+  let recordExp = makeIntlRecord(~loc, message, messageExp, description, width);
   let pluralVariables =
     message
     |> Regexp.findAll(~regexp=Regexp.plural)
@@ -151,8 +156,8 @@ let makeString = (~loc, message, messageExp, description) => {
   };
 };
 
-let makeReactElement = (~loc, message, messageExp, description) => {
-  let recordExp = makeIntlRecord(~loc, message, messageExp, description);
+let makeReactElement = (~loc, message, messageExp, description, width) => {
+  let recordExp = makeIntlRecord(~loc, message, messageExp, description, width);
   let pluralVariables =
     message
     |> Regexp.findAll(~regexp=Regexp.plural)
