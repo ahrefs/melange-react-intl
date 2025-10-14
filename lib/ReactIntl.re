@@ -10,14 +10,7 @@ external dateTimeFormatOptions:
     ~weekday: [ | `narrow | `short | `long]=?,
     ~era: [ | `narrow | `short | `long]=?,
     ~year: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-    ~month: [@mel.string] [
-              | `numeric
-              | [@mel.as "2-digit"] `twoDigit
-              | `narrow
-              | `short
-              | `long
-            ]
-              =?,
+    ~month: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit | `narrow | `short | `long]=?,
     ~day: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
     ~hour: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
     ~minute: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
@@ -32,12 +25,7 @@ type relativeTimeFormatOptions;
 
 [@mel.obj]
 external relativeTimeFormatOptions:
-  (
-    ~numeric: [ | `always | `auto]=?,
-    ~style: [ | `long | `short | `narrow]=?,
-    ~format: string=?,
-    unit
-  ) =>
+  (~numeric: [ | `always | `auto]=?, ~style: [ | `long | `short | `narrow]=?, ~format: string=?, unit) =>
   relativeTimeFormatOptions;
 
 type numberFormatOptions;
@@ -61,19 +49,13 @@ external numberFormatOptions:
 
 type pluralFormatOptions;
 
-[@mel.obj]
-external pluralFormatOptions:
-  (~style: [ | `cardinal | `ordinal]=?, unit) => pluralFormatOptions;
+[@mel.obj] external pluralFormatOptions: (~style: [ | `cardinal | `ordinal]=?, unit) => pluralFormatOptions;
 
 type listFormatOptions;
 
 [@mel.obj]
 external listFormatOptions:
-  (
-    ~style: [ | `long | `short | `narrow]=?,
-    ~_type: [ | `disjunction | `conjunction | `unit]=?,
-    unit
-  ) =>
+  (~style: [ | `long | `short | `narrow]=?, ~_type: [ | `disjunction | `conjunction | `unit]=?, unit) =>
   listFormatOptions;
 
 type displayNameFormatOptions;
@@ -113,114 +95,59 @@ module Intl = {
   type t;
 
   [@mel.get] external locale: t => string = "locale";
-  [@mel.get] [@mel.return nullable]
-  external timeZone: t => option(string) = "timeZone";
+  [@mel.get] [@mel.return nullable] external timeZone: t => option(string) = "timeZone";
   [@mel.get] external formats: t => Js.t({..}) = "formats";
   [@mel.get] external messages: t => Js.Dict.t(string) = "messages";
   [@mel.get] external defaultLocale: t => string = "defaultLocale";
   [@mel.get] external defaultFormats: t => Js.t({..}) = "defaultFormats";
   [@mel.send] external formatDate: (t, Js.Date.t) => string = "formatDate";
+  [@mel.send] external formatDateToParts: (t, Js.Date.t) => array(part) = "formatDateToParts";
+  [@mel.send] external formatDateWithOptions: (t, Js.Date.t, dateTimeFormatOptions) => string = "formatDate";
   [@mel.send]
-  external formatDateToParts: (t, Js.Date.t) => array(part) =
-    "formatDateToParts";
-  [@mel.send]
-  external formatDateWithOptions:
-    (t, Js.Date.t, dateTimeFormatOptions) => string =
-    "formatDate";
-  [@mel.send]
-  external formatDateWithOptionsToParts:
-    (t, Js.Date.t, dateTimeFormatOptions) => array(part) =
-    "formatDateToParts";
+  external formatDateWithOptionsToParts: (t, Js.Date.t, dateTimeFormatOptions) => array(part) = "formatDateToParts";
   [@mel.send] external formatTime: (t, Js.Date.t) => string = "formatTime";
+  [@mel.send] external formatTimeToParts: (t, Js.Date.t) => array(part) = "formatTimeToParts";
+  [@mel.send] external formatTimeWithOptions: (t, Js.Date.t, dateTimeFormatOptions) => string = "formatTime";
   [@mel.send]
-  external formatTimeToParts: (t, Js.Date.t) => array(part) =
-    "formatTimeToParts";
-  [@mel.send]
-  external formatTimeWithOptions:
-    (t, Js.Date.t, dateTimeFormatOptions) => string =
-    "formatTime";
-  [@mel.send]
-  external formatTimeWithOptionsToParts:
-    (t, Js.Date.t, dateTimeFormatOptions) => array(part) =
-    "formatTimeToParts";
-  [@mel.send]
-  external formatRelativeTime: (t, float) => string = "formatRelativeTime";
+  external formatTimeWithOptionsToParts: (t, Js.Date.t, dateTimeFormatOptions) => array(part) = "formatTimeToParts";
+  [@mel.send] external formatRelativeTime: (t, float) => string = "formatRelativeTime";
   [@mel.send]
   external formatRelativeTimeWithUnit:
-    (
-      t,
-      float,
-      [ | `second | `minute | `hour | `day | `week | `month | `quarter | `year]
-    ) =>
-    string =
+    (t, float, [ | `second | `minute | `hour | `day | `week | `month | `quarter | `year]) => string =
     "formatRelativeTime";
   [@mel.send]
   external formatRelativeTimeWithUnitAndOptions:
-    (
-      t,
-      float,
-      [
-        | `second
-        | `minute
-        | `hour
-        | `day
-        | `week
-        | `month
-        | `quarter
-        | `year
-      ],
-      relativeTimeFormatOptions
-    ) =>
+    (t, float, [ | `second | `minute | `hour | `day | `week | `month | `quarter | `year], relativeTimeFormatOptions) =>
     string =
     "formatRelativeTime";
   [@mel.send] external formatNumber: (t, float) => string = "formatNumber";
+  [@mel.send] external formatNumberToParts: (t, float) => array(part) = "formatNumberToParts";
+  [@mel.send] external formatNumberWithOptions: (t, float, numberFormatOptions) => string = "formatNumber";
   [@mel.send]
-  external formatNumberToParts: (t, float) => array(part) =
-    "formatNumberToParts";
-  [@mel.send]
-  external formatNumberWithOptions: (t, float, numberFormatOptions) => string =
-    "formatNumber";
-  [@mel.send]
-  external formatNumberWithOptionsToParts:
-    (t, float, numberFormatOptions) => array(part) =
-    "formatNumberToParts";
+  external formatNumberWithOptionsToParts: (t, float, numberFormatOptions) => array(part) = "formatNumberToParts";
   [@mel.send] external formatPlural: (t, int) => string = "formatPlural";
-  [@mel.send]
-  external formatPluralWithOptions: (t, int, pluralFormatOptions) => string =
-    "formatPlural";
+  [@mel.send] external formatPluralWithOptions: (t, int, pluralFormatOptions) => string = "formatPlural";
   [@mel.send] external formatMessage: (t, message) => string = "formatMessage";
+  [@mel.send] external formatMessageWithValues: (t, message, Js.t({..})) => string = "formatMessage";
+  [@mel.send] external formatList: (t, array(string)) => string = "formatList";
+  [@mel.send] external formatListWithOptions: (t, array(string), listFormatOptions) => string = "formatList";
+  [@mel.send] external formatDisplayName: (t, string) => string = "formatDisplayName";
   [@mel.send]
-  external formatMessageWithValues: (t, message, Js.t({..})) => string =
-    "formatMessage";
-  [@mel.send]
-  external formatList: (t, array(string)) => string = "formatList";
-  [@mel.send]
-  external formatListWithOptions:
-    (t, array(string), listFormatOptions) => string =
-    "formatList";
-  [@mel.send]
-  external formatDisplayName: (t, string) => string = "formatDisplayName";
-  [@mel.send]
-  external formatDisplayNameWithOptions:
-    (t, string, displayNameFormatOptions) => string =
-    "formatDisplayName";
+  external formatDisplayNameWithOptions: (t, string, displayNameFormatOptions) => string = "formatDisplayName";
 };
 
-[@mel.module "react-intl"]
-external context: React.Context.t(Intl.t) = "IntlContext";
+[@mel.module "react-intl"] external context: React.Context.t(Intl.t) = "IntlContext";
 
 [@mel.module "react-intl"] external useIntl: unit => Intl.t = "useIntl";
 
 type textComponent;
 
 external domTag: string => textComponent = "%identity";
-external textComponent: React.component('props) => textComponent =
-  "%identity";
+external textComponent: React.component('props) => textComponent = "%identity";
 
 type intlCache;
 
-[@mel.module "react-intl"]
-external createIntlCache: unit => intlCache = "createIntlCache";
+[@mel.module "react-intl"] external createIntlCache: unit => intlCache = "createIntlCache";
 
 type intlConfig;
 
@@ -239,13 +166,11 @@ external intlConfig:
   ) =>
   intlConfig;
 
-[@mel.module "react-intl"]
-external createIntl: (intlConfig, intlCache) => Intl.t = "createIntl";
+[@mel.module "react-intl"] external createIntl: (intlConfig, intlCache) => Intl.t = "createIntl";
 
 module RawIntlProvider = {
   [@react.component] [@mel.module "react-intl"]
-  external ake: (~value: Intl.t, ~children: React.element) => React.element =
-    "RawIntlProvider";
+  external ake: (~value: Intl.t, ~children: React.element) => React.element = "RawIntlProvider";
 };
 
 module IntlProvider = {
@@ -285,26 +210,14 @@ module FormattedDate = {
   external make:
     (
       ~value: Js.Date.t,
-      ~localeMatcher: [@mel.string] [
-                        | [@mel.as "best fit"] `bestFit
-                        | `lookup
-                      ]
-                        =?,
-      ~formatMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `basic]
-                        =?,
+      ~localeMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `lookup]=?,
+      ~formatMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `basic]=?,
       ~timeZone: string=?,
       ~hour12: bool=?,
       ~weekday: [ | `narrow | `short | `long]=?,
       ~era: [ | `narrow | `short | `long]=?,
       ~year: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~month: [@mel.string] [
-                | `numeric
-                | [@mel.as "2-digit"] `twoDigit
-                | `narrow
-                | `short
-                | `long
-              ]
-                =?,
+      ~month: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit | `narrow | `short | `long]=?,
       ~day: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
       ~hour: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
       ~minute: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
@@ -322,26 +235,14 @@ module FormattedDateParts = {
   external make:
     (
       ~value: Js.Date.t,
-      ~localeMatcher: [@mel.string] [
-                        | [@mel.as "best fit"] `bestFit
-                        | `lookup
-                      ]
-                        =?,
-      ~formatMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `basic]
-                        =?,
+      ~localeMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `lookup]=?,
+      ~formatMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `basic]=?,
       ~timeZone: string=?,
       ~hour12: bool=?,
       ~weekday: [ | `narrow | `short | `long]=?,
       ~era: [ | `narrow | `short | `long]=?,
       ~year: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~month: [@mel.string] [
-                | `numeric
-                | [@mel.as "2-digit"] `twoDigit
-                | `narrow
-                | `short
-                | `long
-              ]
-                =?,
+      ~month: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit | `narrow | `short | `long]=?,
       ~day: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
       ~hour: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
       ~minute: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
@@ -359,26 +260,14 @@ module FormattedTime = {
   external make:
     (
       ~value: Js.Date.t,
-      ~localeMatcher: [@mel.string] [
-                        | [@mel.as "best fit"] `bestFit
-                        | `lookup
-                      ]
-                        =?,
-      ~formatMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `basic]
-                        =?,
+      ~localeMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `lookup]=?,
+      ~formatMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `basic]=?,
       ~timeZone: string=?,
       ~hour12: bool=?,
       ~weekday: [ | `narrow | `short | `long]=?,
       ~era: [ | `narrow | `short | `long]=?,
       ~year: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~month: [@mel.string] [
-                | `numeric
-                | [@mel.as "2-digit"] `twoDigit
-                | `narrow
-                | `short
-                | `long
-              ]
-                =?,
+      ~month: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit | `narrow | `short | `long]=?,
       ~day: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
       ~hour: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
       ~minute: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
@@ -396,26 +285,14 @@ module FormattedTimeParts = {
   external make:
     (
       ~value: Js.Date.t,
-      ~localeMatcher: [@mel.string] [
-                        | [@mel.as "best fit"] `bestFit
-                        | `lookup
-                      ]
-                        =?,
-      ~formatMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `basic]
-                        =?,
+      ~localeMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `lookup]=?,
+      ~formatMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `basic]=?,
       ~timeZone: string=?,
       ~hour12: bool=?,
       ~weekday: [ | `narrow | `short | `long]=?,
       ~era: [ | `narrow | `short | `long]=?,
       ~year: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~month: [@mel.string] [
-                | `numeric
-                | [@mel.as "2-digit"] `twoDigit
-                | `narrow
-                | `short
-                | `long
-              ]
-                =?,
+      ~month: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit | `narrow | `short | `long]=?,
       ~day: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
       ~hour: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
       ~minute: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
@@ -433,17 +310,7 @@ module FormattedRelativeTime = {
   external make:
     (
       ~value: float,
-      ~unit: [
-               | `second
-               | `minute
-               | `hour
-               | `day
-               | `week
-               | `month
-               | `quarter
-               | `year
-             ]
-               =?,
+      ~unit: [ | `second | `minute | `hour | `day | `week | `month | `quarter | `year]=?,
       ~numeric: [ | `always | `auto]=?,
       ~style: [ | `long | `short | `narrow]=?,
       ~format: string=?,
@@ -459,11 +326,7 @@ module FormattedNumber = {
   external make:
     (
       ~value: float,
-      ~localeMatcher: [@mel.string] [
-                        | [@mel.as "best fit"] `bestFit
-                        | `lookup
-                      ]
-                        =?,
+      ~localeMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `lookup]=?,
       ~style: [ | `decimal | `currency | `percent]=?,
       ~currency: string=?,
       ~currencyDisplay: [ | `symbol | `code | `name]=?,
@@ -485,11 +348,7 @@ module FormattedNumberParts = {
   external make:
     (
       ~value: float,
-      ~localeMatcher: [@mel.string] [
-                        | [@mel.as "best fit"] `bestFit
-                        | `lookup
-                      ]
-                        =?,
+      ~localeMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `lookup]=?,
       ~style: [ | `decimal | `currency | `percent]=?,
       ~currency: string=?,
       ~currencyDisplay: [ | `symbol | `code | `name]=?,
