@@ -1,21 +1,30 @@
 let message: ReactIntl.message = [%intl "i am message"];
 let descriptedMessage: ReactIntl.message = [%intl
-  {msg: "i am message", desc: "i am description"}
+  {
+    msg: "i am message",
+    desc: "i am description",
+  }
 ];
 
 let message2: string = [%intl.s "blabla"];
 let descriptedmessage2: string = [%intl.s
-  {msg: "i am message", desc: "i am description"}
+  {
+    msg: "i am message",
+    desc: "i am description",
+  }
 ];
+
+let undescriptedmessage: string = [%intl.s {msg: "i am message"}];
 
 let element3: React.element = [%intl.el "blabla"];
 let descriptedElement3: React.element = [%intl.el
-  {msg: "i am message", desc: "i am description"}
+  {
+    msg: "i am message",
+    desc: "i am description",
+  }
 ];
 
-let stringWithVariable: {. "variable": string} => string = [%intl.s
-  "I am string with {variable}"
-];
+let stringWithVariable: {. "variable": string} => string = [%intl.s "I am string with {variable}"];
 
 let stringWithPluralForm: {. "itemsCount": int} => string = [%intl.s
   "{itemsCount, plural, zero {item} one {item} few {items} many {items} other {items}}"
@@ -42,7 +51,8 @@ let cellText = (~powerUsersCount) => {
     "powerUsersCount": powerUsersCount,
   };
 };
-let elementWithNestedTags = [%intl.el {js|
+let elementWithNestedTags = [%intl.el
+  {js|
   <ul>
     <li>one</li>
     <li>two</li>
@@ -51,4 +61,13 @@ let elementWithNestedTags = [%intl.el {js|
   <p>
     <a href="https://ocaml.com">link text</a>.
   </p>
-|js}];
+|js}
+];
+
+let messageWithMaxLength: ReactIntl.message = [%intl
+  {
+    msg: "i am message with maxLength",
+    desc: "example description",
+    maxLength: 80,
+  }
+];

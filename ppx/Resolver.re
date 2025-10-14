@@ -1,8 +1,19 @@
 open Ppxlib;
 module Builder = Ppxlib.Ast_builder.Default;
 
-let makeId = (~description="", message) =>
-  message ++ "|" ++ description |> Digest.string |> Digest.to_hex;
+let makeId = (~description="", ~maxLength=None, message) => {
+  let maxLengthStr =
+    switch (maxLength) {
+    | None => ""
+    | Some(w) => string_of_int(w)
+    };
+  message
+  ++ "|"
+  ++ description
+  ++ maxLengthStr
+  |> Digest.string
+  |> Digest.to_hex;
+};
 
 let tryUnescape = s =>
   try(Scanf.unescaped(s)) {
@@ -17,11 +28,25 @@ let warning_45 = (~loc) =>
       PStr([Builder.pstr_eval(~loc, Builder.estring(~loc, "-45"), [])]),
   );
 
-let makeIntlRecord = (~loc, message, messageExp, description) => {
-  let id = message |> tryUnescape |> makeId(~description?);
+let makeIntlRecord = (~loc, message, messageExp, description, maxLength) => {
+  let id = message |> tryUnescape |> makeId(~description?, ~maxLength);
   let idExp = Ast_helper.Exp.constant(Pconst_string(id, loc, None));
+  let maxLengthExp =
+    switch (maxLength) {
+    | None => [%expr None]
+    | Some(maxLengthValue) =>
+      let maxLengthStr = string_of_int(maxLengthValue);
+      [%expr
+       Some(
+         [%e Ast_helper.Exp.constant(Pconst_integer(maxLengthStr, None))],
+       )];
+    };
   let expr = [%expr
-    ReactIntl.{id: [%e idExp], defaultMessage: [%e messageExp]}
+    ReactIntl.{
+      id: [%e idExp],
+      defaultMessage: [%e messageExp],
+      maxLength: [%e maxLengthExp],
+    }
   ];
   {...expr, pexp_attributes: [warning_45(~loc)]};
 };
@@ -118,8 +143,9 @@ let makeValuesType = (~loc, fields: list((string, core_type))): core_type => {
   };
 };
 
-let makeString = (~loc, message, messageExp, description) => {
-  let recordExp = makeIntlRecord(~loc, message, messageExp, description);
+let makeString = (~loc, message, messageExp, description, maxLength) => {
+  let recordExp =
+    makeIntlRecord(~loc, message, messageExp, description, maxLength);
   let pluralVariables =
     message
     |> Regexp.findAll(~regexp=Regexp.plural)
@@ -151,14 +177,15 @@ let makeString = (~loc, message, messageExp, description) => {
   };
 };
 
-let makeReactElement = (~loc, message, messageExp, description) => {
-  let recordExp = makeIntlRecord(~loc, message, messageExp, description);
+let makeReactElement = (~loc, message, messageExp, description, maxLength) => {
+  let recordExp =
+    makeIntlRecord(~loc, message, messageExp, description, maxLength);
   let pluralVariables =
     message
     |> Regexp.findAll(~regexp=Regexp.plural)
     |> List.map(label => (label, [%type: int]));
   let cleanedMessage = message |> Regexp.remove(~regexp=Regexp.plural);
-  
+
   let simpleVariables =
     cleanedMessage
     |> Regexp.findAll(~regexp=Regexp.variable)
