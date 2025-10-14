@@ -1,35 +1,65 @@
   $ ../ppx.sh --output re input.re
   let message: ReactIntl.message =
     [@warning "-45"]
-    ReactIntl.{id: "24ac19a52c2b0192688fa8294d28dbae", defaultMessage: "i am message", maxLength: None};
+    ReactIntl.{
+      id: "24ac19a52c2b0192688fa8294d28dbae",
+      defaultMessage: "i am message",
+      maxLength: None,
+    };
   let descriptedMessage: ReactIntl.message =
     [@warning "-45"]
-    ReactIntl.{id: "6142e0d7a3dbfa8e6cbb4cfd716515fa", defaultMessage: "i am message", maxLength: None};
+    ReactIntl.{
+      id: "6142e0d7a3dbfa8e6cbb4cfd716515fa",
+      defaultMessage: "i am message",
+      maxLength: None,
+    };
   let message2: string =
     ReactIntlPpxAdaptor.Message.to_s(
-      [@warning "-45"] ReactIntl.{id: "900317ffb9c870f401a04bef9fd4b5b3", defaultMessage: "blabla", maxLength: None},
+      [@warning "-45"]
+      ReactIntl.{
+        id: "900317ffb9c870f401a04bef9fd4b5b3",
+        defaultMessage: "blabla",
+        maxLength: None,
+      },
     );
   let descriptedmessage2: string =
     ReactIntlPpxAdaptor.Message.to_s(
       [@warning "-45"]
-      ReactIntl.{id: "6142e0d7a3dbfa8e6cbb4cfd716515fa", defaultMessage: "i am message", maxLength: None},
+      ReactIntl.{
+        id: "6142e0d7a3dbfa8e6cbb4cfd716515fa",
+        defaultMessage: "i am message",
+        maxLength: None,
+      },
     );
   let undescriptedmessage: string =
     ReactIntlPpxAdaptor.Message.to_s(
       [@warning "-45"]
-      ReactIntl.{id: "24ac19a52c2b0192688fa8294d28dbae", defaultMessage: "i am message", maxLength: None},
+      ReactIntl.{
+        id: "24ac19a52c2b0192688fa8294d28dbae",
+        defaultMessage: "i am message",
+        maxLength: None,
+      },
     );
   let element3: React.element =
     React.string(
       ReactIntlPpxAdaptor.Message.to_s(
-        [@warning "-45"] ReactIntl.{id: "900317ffb9c870f401a04bef9fd4b5b3", defaultMessage: "blabla", maxLength: None},
+        [@warning "-45"]
+        ReactIntl.{
+          id: "900317ffb9c870f401a04bef9fd4b5b3",
+          defaultMessage: "blabla",
+          maxLength: None,
+        },
       ),
     );
   let descriptedElement3: React.element =
     React.string(
       ReactIntlPpxAdaptor.Message.to_s(
         [@warning "-45"]
-        ReactIntl.{id: "6142e0d7a3dbfa8e6cbb4cfd716515fa", defaultMessage: "i am message", maxLength: None},
+        ReactIntl.{
+          id: "6142e0d7a3dbfa8e6cbb4cfd716515fa",
+          defaultMessage: "i am message",
+          maxLength: None,
+        },
       ),
     );
   let stringWithVariable: {. "variable": string} => string =
@@ -117,7 +147,10 @@
           values,
         )
     ) @@
-    {"powerUsersCountString": powerUsersCount->RR.int, "powerUsersCount": powerUsersCount};
+    {
+      "powerUsersCountString": powerUsersCount->RR.int,
+      "powerUsersCount": powerUsersCount,
+    };
   let elementWithNestedTags =
       (
         values: {
