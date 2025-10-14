@@ -3,19 +3,79 @@ type dateTimeFormatOptions;
 [@mel.obj]
 external dateTimeFormatOptions:
   (
-    ~localeMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `lookup]=?,
-    ~formatMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `basic]=?,
+    ~localeMatcher:
+      [@mel.string] [
+        | [@mel.as "best fit"] `bestFit
+        | `lookup
+      ]
+        =?,
+    ~formatMatcher:
+      [@mel.string] [
+        | [@mel.as "best fit"] `bestFit
+        | `basic
+      ]
+        =?,
     ~timeZone: string=?,
     ~hour12: bool=?,
-    ~weekday: [ | `narrow | `short | `long]=?,
-    ~era: [ | `narrow | `short | `long]=?,
-    ~year: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-    ~month: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit | `narrow | `short | `long]=?,
-    ~day: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-    ~hour: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-    ~minute: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-    ~second: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-    ~timeZoneName: [ | `short | `long]=?,
+    ~weekday:
+      [
+        | `narrow
+        | `short
+        | `long
+      ]
+        =?,
+    ~era:
+      [
+        | `narrow
+        | `short
+        | `long
+      ]
+        =?,
+    ~year:
+      [@mel.string] [
+        | `numeric
+        | [@mel.as "2-digit"] `twoDigit
+      ]
+        =?,
+    ~month:
+      [@mel.string] [
+        | `numeric
+        | [@mel.as "2-digit"] `twoDigit
+        | `narrow
+        | `short
+        | `long
+      ]
+        =?,
+    ~day:
+      [@mel.string] [
+        | `numeric
+        | [@mel.as "2-digit"] `twoDigit
+      ]
+        =?,
+    ~hour:
+      [@mel.string] [
+        | `numeric
+        | [@mel.as "2-digit"] `twoDigit
+      ]
+        =?,
+    ~minute:
+      [@mel.string] [
+        | `numeric
+        | [@mel.as "2-digit"] `twoDigit
+      ]
+        =?,
+    ~second:
+      [@mel.string] [
+        | `numeric
+        | [@mel.as "2-digit"] `twoDigit
+      ]
+        =?,
+    ~timeZoneName:
+      [
+        | `short
+        | `long
+      ]
+        =?,
     ~format: string=?,
     unit
   ) =>
@@ -25,7 +85,23 @@ type relativeTimeFormatOptions;
 
 [@mel.obj]
 external relativeTimeFormatOptions:
-  (~numeric: [ | `always | `auto]=?, ~style: [ | `long | `short | `narrow]=?, ~format: string=?, unit) =>
+  (
+    ~numeric:
+      [
+        | `always
+        | `auto
+      ]
+        =?,
+    ~style:
+      [
+        | `long
+        | `short
+        | `narrow
+      ]
+        =?,
+    ~format: string=?,
+    unit
+  ) =>
   relativeTimeFormatOptions;
 
 type numberFormatOptions;
@@ -33,10 +109,27 @@ type numberFormatOptions;
 [@mel.obj]
 external numberFormatOptions:
   (
-    ~localeMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `lookup]=?,
-    ~style: [ | `decimal | `currency | `percent]=?,
+    ~localeMatcher:
+      [@mel.string] [
+        | [@mel.as "best fit"] `bestFit
+        | `lookup
+      ]
+        =?,
+    ~style:
+      [
+        | `decimal
+        | `currency
+        | `percent
+      ]
+        =?,
     ~currency: string=?,
-    ~currencyDisplay: [ | `symbol | `code | `name]=?,
+    ~currencyDisplay:
+      [
+        | `symbol
+        | `code
+        | `name
+      ]
+        =?,
     ~useGrouping: bool=?,
     ~minimumIntegerDigits: int=?,
     ~minimumFractionDigits: int=?,
@@ -49,13 +142,40 @@ external numberFormatOptions:
 
 type pluralFormatOptions;
 
-[@mel.obj] external pluralFormatOptions: (~style: [ | `cardinal | `ordinal]=?, unit) => pluralFormatOptions;
+[@mel.obj]
+external pluralFormatOptions:
+  (
+    ~style:
+      [
+        | `cardinal
+        | `ordinal
+      ]
+        =?,
+    unit
+  ) =>
+  pluralFormatOptions;
 
 type listFormatOptions;
 
 [@mel.obj]
 external listFormatOptions:
-  (~style: [ | `long | `short | `narrow]=?, ~_type: [ | `disjunction | `conjunction | `unit]=?, unit) =>
+  (
+    ~style:
+      [
+        | `long
+        | `short
+        | `narrow
+      ]
+        =?,
+    ~_type:
+      [
+        | `disjunction
+        | `conjunction
+        | `unit
+      ]
+        =?,
+    unit
+  ) =>
   listFormatOptions;
 
 type displayNameFormatOptions;
@@ -63,9 +183,27 @@ type displayNameFormatOptions;
 [@mel.obj]
 external displayNameFormatOptions:
   (
-    ~style: [ | `long | `short | `narrow]=?,
-    ~_type: [ | `language | `region | `script | `currency]=?,
-    ~fallback: [ | `code | `none]=?,
+    ~style:
+      [
+        | `long
+        | `short
+        | `narrow
+      ]
+        =?,
+    ~_type:
+      [
+        | `language
+        | `region
+        | `script
+        | `currency
+      ]
+        =?,
+    ~fallback:
+      [
+        | `code
+        | `none
+      ]
+        =?,
     unit
   ) =>
   displayNameFormatOptions;
@@ -113,11 +251,39 @@ module Intl = {
   [@mel.send] external formatRelativeTime: (t, float) => string = "formatRelativeTime";
   [@mel.send]
   external formatRelativeTimeWithUnit:
-    (t, float, [ | `second | `minute | `hour | `day | `week | `month | `quarter | `year]) => string =
+    (
+      t,
+      float,
+      [
+        | `second
+        | `minute
+        | `hour
+        | `day
+        | `week
+        | `month
+        | `quarter
+        | `year
+      ]
+    ) =>
+    string =
     "formatRelativeTime";
   [@mel.send]
   external formatRelativeTimeWithUnitAndOptions:
-    (t, float, [ | `second | `minute | `hour | `day | `week | `month | `quarter | `year], relativeTimeFormatOptions) =>
+    (
+      t,
+      float,
+      [
+        | `second
+        | `minute
+        | `hour
+        | `day
+        | `week
+        | `month
+        | `quarter
+        | `year
+      ],
+      relativeTimeFormatOptions
+    ) =>
     string =
     "formatRelativeTime";
   [@mel.send] external formatNumber: (t, float) => string = "formatNumber";
@@ -210,19 +376,79 @@ module FormattedDate = {
   external make:
     (
       ~value: Js.Date.t,
-      ~localeMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `lookup]=?,
-      ~formatMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `basic]=?,
+      ~localeMatcher:
+        [@mel.string] [
+          | [@mel.as "best fit"] `bestFit
+          | `lookup
+        ]
+          =?,
+      ~formatMatcher:
+        [@mel.string] [
+          | [@mel.as "best fit"] `bestFit
+          | `basic
+        ]
+          =?,
       ~timeZone: string=?,
       ~hour12: bool=?,
-      ~weekday: [ | `narrow | `short | `long]=?,
-      ~era: [ | `narrow | `short | `long]=?,
-      ~year: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~month: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit | `narrow | `short | `long]=?,
-      ~day: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~hour: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~minute: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~second: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~timeZoneName: [ | `short | `long]=?,
+      ~weekday:
+        [
+          | `narrow
+          | `short
+          | `long
+        ]
+          =?,
+      ~era:
+        [
+          | `narrow
+          | `short
+          | `long
+        ]
+          =?,
+      ~year:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~month:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+          | `narrow
+          | `short
+          | `long
+        ]
+          =?,
+      ~day:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~hour:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~minute:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~second:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~timeZoneName:
+        [
+          | `short
+          | `long
+        ]
+          =?,
       ~format: string=?,
       ~children: (~formattedDate: string) => React.element=?
     ) =>
@@ -235,19 +461,79 @@ module FormattedDateParts = {
   external make:
     (
       ~value: Js.Date.t,
-      ~localeMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `lookup]=?,
-      ~formatMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `basic]=?,
+      ~localeMatcher:
+        [@mel.string] [
+          | [@mel.as "best fit"] `bestFit
+          | `lookup
+        ]
+          =?,
+      ~formatMatcher:
+        [@mel.string] [
+          | [@mel.as "best fit"] `bestFit
+          | `basic
+        ]
+          =?,
       ~timeZone: string=?,
       ~hour12: bool=?,
-      ~weekday: [ | `narrow | `short | `long]=?,
-      ~era: [ | `narrow | `short | `long]=?,
-      ~year: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~month: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit | `narrow | `short | `long]=?,
-      ~day: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~hour: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~minute: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~second: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~timeZoneName: [ | `short | `long]=?,
+      ~weekday:
+        [
+          | `narrow
+          | `short
+          | `long
+        ]
+          =?,
+      ~era:
+        [
+          | `narrow
+          | `short
+          | `long
+        ]
+          =?,
+      ~year:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~month:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+          | `narrow
+          | `short
+          | `long
+        ]
+          =?,
+      ~day:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~hour:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~minute:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~second:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~timeZoneName:
+        [
+          | `short
+          | `long
+        ]
+          =?,
       ~format: string=?,
       ~children: (~formattedDateParts: array(part)) => React.element
     ) =>
@@ -260,19 +546,79 @@ module FormattedTime = {
   external make:
     (
       ~value: Js.Date.t,
-      ~localeMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `lookup]=?,
-      ~formatMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `basic]=?,
+      ~localeMatcher:
+        [@mel.string] [
+          | [@mel.as "best fit"] `bestFit
+          | `lookup
+        ]
+          =?,
+      ~formatMatcher:
+        [@mel.string] [
+          | [@mel.as "best fit"] `bestFit
+          | `basic
+        ]
+          =?,
       ~timeZone: string=?,
       ~hour12: bool=?,
-      ~weekday: [ | `narrow | `short | `long]=?,
-      ~era: [ | `narrow | `short | `long]=?,
-      ~year: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~month: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit | `narrow | `short | `long]=?,
-      ~day: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~hour: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~minute: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~second: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~timeZoneName: [ | `short | `long]=?,
+      ~weekday:
+        [
+          | `narrow
+          | `short
+          | `long
+        ]
+          =?,
+      ~era:
+        [
+          | `narrow
+          | `short
+          | `long
+        ]
+          =?,
+      ~year:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~month:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+          | `narrow
+          | `short
+          | `long
+        ]
+          =?,
+      ~day:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~hour:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~minute:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~second:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~timeZoneName:
+        [
+          | `short
+          | `long
+        ]
+          =?,
       ~format: string=?,
       ~children: (~formattedTime: string) => React.element=?
     ) =>
@@ -285,19 +631,79 @@ module FormattedTimeParts = {
   external make:
     (
       ~value: Js.Date.t,
-      ~localeMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `lookup]=?,
-      ~formatMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `basic]=?,
+      ~localeMatcher:
+        [@mel.string] [
+          | [@mel.as "best fit"] `bestFit
+          | `lookup
+        ]
+          =?,
+      ~formatMatcher:
+        [@mel.string] [
+          | [@mel.as "best fit"] `bestFit
+          | `basic
+        ]
+          =?,
       ~timeZone: string=?,
       ~hour12: bool=?,
-      ~weekday: [ | `narrow | `short | `long]=?,
-      ~era: [ | `narrow | `short | `long]=?,
-      ~year: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~month: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit | `narrow | `short | `long]=?,
-      ~day: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~hour: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~minute: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~second: [@mel.string] [ | `numeric | [@mel.as "2-digit"] `twoDigit]=?,
-      ~timeZoneName: [ | `short | `long]=?,
+      ~weekday:
+        [
+          | `narrow
+          | `short
+          | `long
+        ]
+          =?,
+      ~era:
+        [
+          | `narrow
+          | `short
+          | `long
+        ]
+          =?,
+      ~year:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~month:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+          | `narrow
+          | `short
+          | `long
+        ]
+          =?,
+      ~day:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~hour:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~minute:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~second:
+        [@mel.string] [
+          | `numeric
+          | [@mel.as "2-digit"] `twoDigit
+        ]
+          =?,
+      ~timeZoneName:
+        [
+          | `short
+          | `long
+        ]
+          =?,
       ~format: string=?,
       ~children: (~formattedTimeParts: array(part)) => React.element
     ) =>
@@ -310,9 +716,31 @@ module FormattedRelativeTime = {
   external make:
     (
       ~value: float,
-      ~unit: [ | `second | `minute | `hour | `day | `week | `month | `quarter | `year]=?,
-      ~numeric: [ | `always | `auto]=?,
-      ~style: [ | `long | `short | `narrow]=?,
+      ~unit:
+        [
+          | `second
+          | `minute
+          | `hour
+          | `day
+          | `week
+          | `month
+          | `quarter
+          | `year
+        ]
+          =?,
+      ~numeric:
+        [
+          | `always
+          | `auto
+        ]
+          =?,
+      ~style:
+        [
+          | `long
+          | `short
+          | `narrow
+        ]
+          =?,
       ~format: string=?,
       ~updateIntervalInSeconds: float=?,
       ~children: (~formattedDate: string) => React.element=?
@@ -326,10 +754,27 @@ module FormattedNumber = {
   external make:
     (
       ~value: float,
-      ~localeMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `lookup]=?,
-      ~style: [ | `decimal | `currency | `percent]=?,
+      ~localeMatcher:
+        [@mel.string] [
+          | [@mel.as "best fit"] `bestFit
+          | `lookup
+        ]
+          =?,
+      ~style:
+        [
+          | `decimal
+          | `currency
+          | `percent
+        ]
+          =?,
       ~currency: string=?,
-      ~currencyDisplay: [ | `symbol | `code | `name]=?,
+      ~currencyDisplay:
+        [
+          | `symbol
+          | `code
+          | `name
+        ]
+          =?,
       ~useGrouping: bool=?,
       ~minimumIntegerDigits: int=?,
       ~minimumFractionDigits: int=?,
@@ -348,10 +793,27 @@ module FormattedNumberParts = {
   external make:
     (
       ~value: float,
-      ~localeMatcher: [@mel.string] [ | [@mel.as "best fit"] `bestFit | `lookup]=?,
-      ~style: [ | `decimal | `currency | `percent]=?,
+      ~localeMatcher:
+        [@mel.string] [
+          | [@mel.as "best fit"] `bestFit
+          | `lookup
+        ]
+          =?,
+      ~style:
+        [
+          | `decimal
+          | `currency
+          | `percent
+        ]
+          =?,
       ~currency: string=?,
-      ~currencyDisplay: [ | `symbol | `code | `name]=?,
+      ~currencyDisplay:
+        [
+          | `symbol
+          | `code
+          | `name
+        ]
+          =?,
       ~useGrouping: bool=?,
       ~minimumIntegerDigits: int=?,
       ~minimumFractionDigits: int=?,
@@ -370,7 +832,12 @@ module FormattedPlural = {
   external make:
     (
       ~value: int,
-      ~style: [ | `cardinal | `ordinal]=?,
+      ~style:
+        [
+          | `cardinal
+          | `ordinal
+        ]
+          =?,
       ~other: React.element,
       ~zero: React.element=?,
       ~one: React.element=?,
@@ -388,8 +855,20 @@ module FormattedList = {
   external make:
     (
       ~value: array(string),
-      ~style: [ | `long | `short | `narrow]=?,
-      ~_type: [ | `disjunction | `conjunction | `unit]=?,
+      ~style:
+        [
+          | `long
+          | `short
+          | `narrow
+        ]
+          =?,
+      ~_type:
+        [
+          | `disjunction
+          | `conjunction
+          | `unit
+        ]
+          =?,
       ~children: (~formattedList: string) => React.element=?
     ) =>
     React.element =
@@ -401,9 +880,27 @@ module FormattedDisplayName = {
   external make:
     (
       ~value: string,
-      ~style: [ | `long | `short | `narrow]=?,
-      ~_type: [ | `language | `region | `script | `currency]=?,
-      ~fallback: [ | `code | `none]=?
+      ~style:
+        [
+          | `long
+          | `short
+          | `narrow
+        ]
+          =?,
+      ~_type:
+        [
+          | `language
+          | `region
+          | `script
+          | `currency
+        ]
+          =?,
+      ~fallback:
+        [
+          | `code
+          | `none
+        ]
+          =?
     ) =>
     React.element =
     "FormattedDisplayName";

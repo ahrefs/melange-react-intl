@@ -13,13 +13,28 @@ module ReactIntlPpxAdaptor = {
 };
 
 let message: ReactIntl.message = [%intl "i am message"];
-let descriptedMessage: ReactIntl.message = [%intl {msg: "i am message", desc: "i am description"}];
+let descriptedMessage: ReactIntl.message = [%intl
+  {
+    msg: "i am message",
+    desc: "i am description",
+  }
+];
 
 let message2: string = [%intl.s "blabla"];
-let descriptedmessage2: string = [%intl.s {msg: "i am message", desc: "i am description"}];
+let descriptedmessage2: string = [%intl.s
+  {
+    msg: "i am message",
+    desc: "i am description",
+  }
+];
 
 let element3: React.element = [%intl.el "blabla"];
-let descriptedElement3: React.element = [%intl.el {msg: "i am message", desc: "i am description"}];
+let descriptedElement3: React.element = [%intl.el
+  {
+    msg: "i am message",
+    desc: "i am description",
+  }
+];
 
 let stringWithVariable: {. "variable": string} => string = [%intl.s "I am string with {variable}"];
 
