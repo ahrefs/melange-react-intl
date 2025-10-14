@@ -57,4 +57,7 @@ With plural
         ): string
       )
     ) @@
-    {"keywordsCount": keywords->List.length, "listName": name};
+    {
+      "keywordsCount": keywords->List.length,
+      "listName": name,
+    };

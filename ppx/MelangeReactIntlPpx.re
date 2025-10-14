@@ -51,7 +51,21 @@ let extractMessage = (~loc, expression) =>
 
     // Validate that required fields are present
     switch (msgField^) {
-    | Some((message, messageExp)) => (message, messageExp, descField^, maxLengthField^)
+    | Some((message, messageExp)) =>
+      // Validate maxLength constraint if specified
+      switch (maxLengthField^) {
+      | Some(maxLength) when String.length(message) > maxLength =>
+        Location.raise_errorf(
+          ~loc=messageExp.pexp_loc,
+          {|Message length of "%s" (%d) exceeds maxLength of %d|},
+          message,
+          String.length(message),
+          maxLength,
+        )
+      | Some(_)
+      | None => ()
+      };
+      (message, messageExp, descField^, maxLengthField^);
     | None => Location.raise_errorf(~loc, "react-intl-ppx requires a 'msg' field in the record")
     };
 
