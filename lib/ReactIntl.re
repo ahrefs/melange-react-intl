@@ -211,7 +211,7 @@ external displayNameFormatOptions:
 type message = {
   id: string,
   defaultMessage: string,
-  width: option(int),
+  maxLength: option(int),
 };
 
 /* The kinds of values that instances of [%intl.s ""] or [%intl.el ""] can be. It's only used in the native runtime, and not used by the melange bindings. */

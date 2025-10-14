@@ -13,7 +13,7 @@ Basic case
         ReactIntl.{
           id: "52d92c9e4920f7e245381fad58360708",
           defaultMessage: {js|{maxLength} characters maximum|js},
-          width: None,
+          maxLength: None,
         },
         values,
       )
@@ -51,7 +51,7 @@ With plural
           ReactIntl.{
             id: "0df6b0b4831df770629c8980275ccf00",
             defaultMessage: {js|Failed to remove {keywordsCount, plural, zero {keywords} one {keyword} few {keywords} other {keywords}} from "{listName}".|js},
-            width: None,
+            maxLength: None,
           },
           values,
         ): string

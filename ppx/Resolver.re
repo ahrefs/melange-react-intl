@@ -1,13 +1,13 @@
 open Ppxlib;
 module Builder = Ppxlib.Ast_builder.Default;
 
-let makeId = (~description="", ~width=None, message) => {
-  let widthStr =
-    switch (width) {
+let makeId = (~description="", ~maxLength=None, message) => {
+  let maxLengthStr =
+    switch (maxLength) {
     | None => ""
     | Some(w) => string_of_int(w)
     };
-  message ++ "|" ++ description ++ widthStr |> Digest.string |> Digest.to_hex;
+  message ++ "|" ++ description ++ maxLengthStr |> Digest.string |> Digest.to_hex;
 };
 
 let tryUnescape = s =>
@@ -25,21 +25,21 @@ let warning_45 = (~loc) =>
     ~payload=PStr([Builder.pstr_eval(~loc, Builder.estring(~loc, "-45"), [])]),
   );
 
-let makeIntlRecord = (~loc, message, messageExp, description, width) => {
-  let id = message |> tryUnescape |> makeId(~description?, ~width);
+let makeIntlRecord = (~loc, message, messageExp, description, maxLength) => {
+  let id = message |> tryUnescape |> makeId(~description?, ~maxLength);
   let idExp = Ast_helper.Exp.constant(Pconst_string(id, loc, None));
-  let widthExp =
-    switch (width) {
+  let maxLengthExp =
+    switch (maxLength) {
     | None => [%expr None]
-    | Some(widthValue) =>
-      let widthStr = string_of_int(widthValue);
-      [%expr Some([%e Ast_helper.Exp.constant(Pconst_integer(widthStr, None))])];
+    | Some(maxLengthValue) =>
+      let maxLengthStr = string_of_int(maxLengthValue);
+      [%expr Some([%e Ast_helper.Exp.constant(Pconst_integer(maxLengthStr, None))])];
     };
   let expr = [%expr
     ReactIntl.{
       id: [%e idExp],
       defaultMessage: [%e messageExp],
-      width: [%e widthExp],
+      maxLength: [%e maxLengthExp],
     }
   ];
   {
@@ -172,8 +172,8 @@ let makeValuesType = (~loc, fields: list((string, core_type))): core_type => {
   };
 };
 
-let makeString = (~loc, message, messageExp, description, width) => {
-  let recordExp = makeIntlRecord(~loc, message, messageExp, description, width);
+let makeString = (~loc, message, messageExp, description, maxLength) => {
+  let recordExp = makeIntlRecord(~loc, message, messageExp, description, maxLength);
   let pluralVariables = message |> Regexp.findAll(~regexp=Regexp.plural) |> List.map(label => (label, [%type: int]));
   let cleanedMessage = pluralVariables == [] ? message : message |> Regexp.remove(~regexp=Regexp.plural);
   let simpleVariables =
@@ -195,8 +195,8 @@ let makeString = (~loc, message, messageExp, description, width) => {
   };
 };
 
-let makeReactElement = (~loc, message, messageExp, description, width) => {
-  let recordExp = makeIntlRecord(~loc, message, messageExp, description, width);
+let makeReactElement = (~loc, message, messageExp, description, maxLength) => {
+  let recordExp = makeIntlRecord(~loc, message, messageExp, description, maxLength);
   let pluralVariables = message |> Regexp.findAll(~regexp=Regexp.plural) |> List.map(label => (label, [%type: int]));
   let cleanedMessage = message |> Regexp.remove(~regexp=Regexp.plural);
 

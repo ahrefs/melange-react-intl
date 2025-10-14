@@ -64,10 +64,10 @@ let elementWithNestedTags = [%intl.el
 |js}
 ];
 
-let messageWithWidth: ReactIntl.message = [%intl
+let messageWithMaxLength: ReactIntl.message = [%intl
   {
-    msg: "i am message with width",
+    msg: "i am message with maxLength",
     desc: "example description",
-    width: 80,
+    maxLength: 80,
   }
 ];
