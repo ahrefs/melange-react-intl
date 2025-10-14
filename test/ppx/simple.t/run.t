@@ -159,3 +159,9 @@
       defaultMessage: "i am message with maxLength",
       maxLength: Some(80),
     };
+  $ ../ppx.sh --output re inputExceeding.re
+  File "output.ml", line 4, characters 13-52:
+  4 |        msg = "i am message with maxLength exceeding";
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  Error: Message length of "i am message with maxLength exceeding" (37) exceeds maxLength of 20
+  [1]
