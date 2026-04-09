@@ -112,6 +112,45 @@
         },
         values,
       );
+  let stringWithPluralFormNoZero: {. "itemsCount": int} => string =
+    (values: {. "itemsCount": int}) => (
+      ReactIntlPpxAdaptor.Message.format_to_s(
+        ~list_of_values=[("itemsCount", `Number(values##itemsCount))],
+        [@warning "-45"]
+        ReactIntl.{
+          id: "4bd22beea7e3314a3932db7f44bf5d09",
+          defaultMessage: "{itemsCount, plural, one {item} few {items} many {items} other {items}}",
+          maxLength: None,
+        },
+        values,
+      ): string
+    );
+  let stringWithPluralFormNoFew: {. "itemsCount": int} => string =
+    (values: {. "itemsCount": int}) => (
+      ReactIntlPpxAdaptor.Message.format_to_s(
+        ~list_of_values=[("itemsCount", `Number(values##itemsCount))],
+        [@warning "-45"]
+        ReactIntl.{
+          id: "16803d1a875cd1508f82a14149b1a1e0",
+          defaultMessage: "{itemsCount, plural, zero {item} one {item} many {items} other {items}}",
+          maxLength: None,
+        },
+        values,
+      ): string
+    );
+  let stringWithPluralFormNoZeroNoFew: {. "itemsCount": int} => string =
+    (values: {. "itemsCount": int}) => (
+      ReactIntlPpxAdaptor.Message.format_to_s(
+        ~list_of_values=[("itemsCount", `Number(values##itemsCount))],
+        [@warning "-45"]
+        ReactIntl.{
+          id: "885a4d7a970a7515c3e340cdaccfc03b",
+          defaultMessage: "{itemsCount, plural, one {item} other {items}}",
+          maxLength: None,
+        },
+        values,
+      ): string
+    );
   let elementWithRichText: {. "a": string => React.element} => React.element =
     (values: {. "a": string => React.element}) =>
       ReactIntlPpxAdaptor.Message.format_to_el(
