@@ -50,6 +50,14 @@ let stringWithPluralFormNoZeroNoFew: {. "itemsCount": int} => string = [%intl.s
   "{itemsCount, plural, one {item} other {items}}"
 ];
 
+let stringWithPluralFormNoOne: {. "itemsCount": int} => string = [%intl.s
+  "{itemsCount, plural, zero {item} few {items} many {items} other {items}}"
+];
+
+let stringWithPluralFormOnlyOther: {. "itemsCount": int} => string = [%intl.s
+  "{itemsCount, plural, other {items}}"
+];
+
 let elementWithRichText: {. "a": string => React.element} => React.element = [%intl.el
   "Some text with <a>link text</a>"
 ];

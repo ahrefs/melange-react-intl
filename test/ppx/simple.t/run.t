@@ -151,6 +151,32 @@
         values,
       ): string
     );
+  let stringWithPluralFormNoOne: {. "itemsCount": int} => string =
+    (values: {. "itemsCount": int}) => (
+      ReactIntlPpxAdaptor.Message.format_to_s(
+        ~list_of_values=[("itemsCount", `Number(values##itemsCount))],
+        [@warning "-45"]
+        ReactIntl.{
+          id: "45bf442cb090ff6a13b064b17e14300e",
+          defaultMessage: "{itemsCount, plural, zero {item} few {items} many {items} other {items}}",
+          maxLength: None,
+        },
+        values,
+      ): string
+    );
+  let stringWithPluralFormOnlyOther: {. "itemsCount": int} => string =
+    (values: {. "itemsCount": int}) => (
+      ReactIntlPpxAdaptor.Message.format_to_s(
+        ~list_of_values=[("itemsCount", `Number(values##itemsCount))],
+        [@warning "-45"]
+        ReactIntl.{
+          id: "081ae6d38f86613b243dd3e97503454c",
+          defaultMessage: "{itemsCount, plural, other {items}}",
+          maxLength: None,
+        },
+        values,
+      ): string
+    );
   let elementWithRichText: {. "a": string => React.element} => React.element =
     (values: {. "a": string => React.element}) =>
       ReactIntlPpxAdaptor.Message.format_to_el(
