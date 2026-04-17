@@ -2,7 +2,7 @@ let variable = Re.Pcre.regexp("\\{(\\w+)}");
 
 let plural =
   Re.Pcre.regexp(
-    "\\{(\\w+), plural, zero \\{[^\\}]+\\} one \\{[^\\}]+\\} few \\{[^\\}]+\\}(?: many \\{[^\\}]+\\})? other \\{[A-Za-z ]+\\}\\}",
+    "\\{(\\w+), plural,(?: zero \\{[^\\}]+\\})?(?: one \\{[^\\}]+\\})?(?: few \\{[^\\}]+\\})?(?: many \\{[^\\}]+\\})? other \\{[A-Za-z ]+\\}\\}",
   );
 
 let findAll = (~regexp, s) =>

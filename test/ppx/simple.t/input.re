@@ -38,6 +38,26 @@ let elementWithPluralForm: {. "itemsCount": int} => React.element = [%intl.el
   "{itemsCount, plural, zero {item} one {item} few {items} many {items} other {items}}"
 ];
 
+let stringWithPluralFormNoZero: {. "itemsCount": int} => string = [%intl.s
+  "{itemsCount, plural, one {item} few {items} many {items} other {items}}"
+];
+
+let stringWithPluralFormNoFew: {. "itemsCount": int} => string = [%intl.s
+  "{itemsCount, plural, zero {item} one {item} many {items} other {items}}"
+];
+
+let stringWithPluralFormNoZeroNoFew: {. "itemsCount": int} => string = [%intl.s
+  "{itemsCount, plural, one {item} other {items}}"
+];
+
+let stringWithPluralFormNoOne: {. "itemsCount": int} => string = [%intl.s
+  "{itemsCount, plural, zero {item} few {items} many {items} other {items}}"
+];
+
+let stringWithPluralFormOnlyOther: {. "itemsCount": int} => string = [%intl.s
+  "{itemsCount, plural, other {items}}"
+];
+
 let elementWithRichText: {. "a": string => React.element} => React.element = [%intl.el
   "Some text with <a>link text</a>"
 ];
