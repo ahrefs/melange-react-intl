@@ -283,6 +283,40 @@
         values,
       ): string
     );
+  let stringWithSiblingPlurals:
+    {
+      .
+      "apples": int,
+      "applesStr": string,
+      "pears": int,
+      "pearsStr": string,
+    } =>
+    string =
+    (
+      values: {
+        .
+        "applesStr": string,
+        "pearsStr": string,
+        "apples": int,
+        "pears": int,
+      },
+    ) => (
+      ReactIntlPpxAdaptor.Message.format_to_s(
+        ~list_of_values=[
+          ("applesStr", `String(values##applesStr)),
+          ("pearsStr", `String(values##pearsStr)),
+          ("apples", `Number(values##apples)),
+          ("pears", `Number(values##pears)),
+        ],
+        [@warning "-45"]
+        ReactIntl.{
+          id: "f114690195794f829273ba6f739e2d20",
+          defaultMessage: "{apples, plural, one {{applesStr} apple} other {{applesStr} apples}} and {pears, plural, one {{pearsStr} pear} other {{pearsStr} pears}}",
+          maxLength: None,
+        },
+        values,
+      ): string
+    );
   let elementWithPluralBranchVariable:
     {
       .

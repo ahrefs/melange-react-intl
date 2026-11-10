@@ -91,6 +91,18 @@ let stringWithQuotedBracesInPluralBranch:
   "{count, plural, one {It''s one '{'item'}' for {name}} other {You've got '}' and '{' for {name}}}"
 ];
 
+let stringWithSiblingPlurals:
+  {
+    .
+    "apples": int,
+    "applesStr": string,
+    "pears": int,
+    "pearsStr": string,
+  } =>
+  string = [%intl.s
+  "{apples, plural, one {{applesStr} apple} other {{applesStr} apples}} and {pears, plural, one {{pearsStr} pear} other {{pearsStr} pears}}"
+];
+
 let elementWithPluralBranchVariable:
   {
     .

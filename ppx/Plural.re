@@ -2,12 +2,12 @@
      {count, plural, one {{countStr} item} other {{countStr} items}}
 
    A branch body can hold any text, including digits and characters like . , ! and '.
-   Braces in a body must either belong to a {placeholder} or a nested plural, or be
-   ICU-quoted ('{' and '}'). The scanner tracks brace depth and skips quoted text to find
-   where each body ends.
+   Braces in a body must either belong to a {placeholder} or be ICU-quoted ('{' and '}').
+   The scanner tracks brace depth and skips quoted text to find where each body ends.
 
    Selectors must be zero, one, few, many and other, in that order, each at most once,
-   and other is required. A plural that breaks these rules or isn't closed raises [Error]. */
+   and other is required. A plural that breaks these rules, contains another plural or
+   isn't closed raises [Error]. */
 
 type t = {
   name: string,
@@ -97,16 +97,41 @@ let rec indexOf = (x, ~from=0) =>
   | [y, ..._] when y == x => Some(from)
   | [_, ...rest] => indexOf(x, ~from=from + 1, rest);
 
-/* Parses [{name, plural, selector {body} ... other {body}}] starting at the opening brace [start].
-   Returns [None] when the text there isn't a plural header. Raises [Error] when it is one but
-   the rest is malformed or uses selectors other than [selectors], in that order. */
-let parseAt = (s, start) => {
+/* Reads [{name, plural,] starting at the opening brace [start]. Returns the name and the index
+   just past the second comma. */
+let parseHeader = (s, start) => {
   let* i = expectChar(s, start, '{');
   let* (name, i) = readWord(s, skipSpaces(s, i));
   let* i = expectChar(s, skipSpaces(s, i), ',');
   let* (kind, i) = readWord(s, skipSpaces(s, i));
   let* i = kind == "plural" ? Some(i) : None;
   let* i = expectChar(s, skipSpaces(s, i), ',');
+  Some((name, i));
+};
+
+/* Name of the first plural header in [s], skipping ICU-quoted text. */
+let findHeader = s => {
+  let len = String.length(s);
+  let rec go = i =>
+    if (i >= len) {
+      None;
+    } else if (s.[i] == '\'') {
+      go(skipQuote(s, i));
+    } else {
+      switch (s.[i] == '{' ? parseHeader(s, i) : None) {
+      | Some((name, _)) => Some(name)
+      | None => go(i + 1)
+      };
+    };
+  go(0);
+};
+
+/* Parses [{name, plural, selector {body} ... other {body}}] starting at the opening brace [start].
+   Returns [None] when the text there isn't a plural header. Raises [Error] when it is one but
+   the rest is malformed, uses selectors other than [selectors] in that order, or contains
+   another plural. */
+let parseAt = (s, start) => {
+  let* (name, i) = parseHeader(s, start);
   let fail = reason => raise(Error(Printf.sprintf("plural `%s` %s", name, reason)));
   /* [previous] is the selector of the branch before, if any. */
   let rec branches = (i, acc, previous) => {
@@ -160,6 +185,10 @@ let parseAt = (s, start) => {
         | None => fail(Printf.sprintf("has an unclosed `%s` branch", selector))
         };
       let body = String.sub(s, i + 1, close - i - 1);
+      switch (findHeader(body)) {
+      | Some(inner) => fail(Printf.sprintf("contains nested plural `%s`", inner))
+      | None => ()
+      };
       branches(close + 1, [body, ...acc], Some(selector));
     };
   };
@@ -185,11 +214,10 @@ let findAll = s => {
   go(0, []);
 };
 
-/* Splits a message into the names of its plural arguments (nested ones included) and
-   the remaining text: everything outside the plurals followed by every branch body,
-   with the plural syntax itself removed. Callers look for placeholders and tags in the
-   remaining text. */
-let rec extract = s => {
+/* Splits a message into the names of its plural arguments and the remaining text:
+   everything outside the plurals followed by every branch body, with the plural syntax
+   itself removed. Callers look for placeholders and tags in the remaining text. */
+let extract = s => {
   let plurals = findAll(s);
   let (outside, last) =
     List.fold_left(
@@ -198,8 +226,8 @@ let rec extract = s => {
       plurals,
     );
   let outside = [String.sub(s, last, String.length(s) - last), ...outside] |> List.rev;
-  let nested = plurals |> List.concat_map(plural => plural.branches) |> List.map(extract);
-  let names = List.map(plural => plural.name, plurals) @ List.concat_map(fst, nested);
-  let text = String.concat(" ", outside @ List.map(snd, nested));
+  let bodies = List.concat_map(plural => plural.branches, plurals);
+  let names = List.map(plural => plural.name, plurals);
+  let text = String.concat(" ", outside @ bodies);
   (List.sort_uniq(String.compare, names), text);
 };

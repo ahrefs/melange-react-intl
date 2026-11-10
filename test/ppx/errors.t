@@ -102,7 +102,20 @@ Plain intl is checked too
   Error: melange-react-intl: plural `count` has no `other` branch
   [1]
 
-Nested plural without an other branch
+Nested plural
+
+  $ cat > input.re <<EOF
+  > let t = [%intl.s "{a, plural, one {x} other {{b, plural, one {y} other {z}}}}"];
+  > EOF
+
+  $ ./ppx.sh --output re input.re
+  File "output.ml", line 2, characters 11-72:
+  2 |   [%intl.s "{a, plural, one {x} other {{b, plural, one {y} other {z}}}}"]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  Error: melange-react-intl: plural `a` contains nested plural `b`
+  [1]
+
+Nested plural that is itself malformed reports the nesting
 
   $ cat > input.re <<EOF
   > let t = [%intl.s "{a, plural, one {{b, plural, one {x}}} other {y}}"];
@@ -112,5 +125,5 @@ Nested plural without an other branch
   File "output.ml", line 1, characters 17-68:
   1 | let t = [%intl.s "{a, plural, one {{b, plural, one {x}}} other {y}}"]
                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  Error: melange-react-intl: plural `b` has no `other` branch
+  Error: melange-react-intl: plural `a` contains nested plural `b`
   [1]
