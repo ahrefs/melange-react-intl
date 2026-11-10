@@ -37,6 +37,19 @@ Plural with a missing branch body
   Error: melange-react-intl: plural `count` is missing `{` after selector `one`
   [1]
 
+Exact-match selectors are not supported
+
+  $ cat > input.re <<EOF
+  > let t = [%intl.s "{count, plural, =0 {No items} other {items}}"];
+  > EOF
+
+  $ ./ppx.sh --output re input.re
+  File "output.ml", line 1, characters 17-63:
+  1 | let t = [%intl.s "{count, plural, =0 {No items} other {items}}"]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  Error: melange-react-intl: plural `count` has unexpected `=` where a selector should be
+  [1]
+
 Plain intl is checked too
 
   $ cat > input.re <<EOF

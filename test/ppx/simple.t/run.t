@@ -233,7 +233,7 @@
         values,
       ): string
     );
-  let stringWithExactPluralSelector:
+  let stringWithPluralArgumentInBranch:
     {
       .
       "count": int,
@@ -251,8 +251,8 @@
         ~list_of_values=[("folder", `String(values##folder)), ("count", `Number(values##count))],
         [@warning "-45"]
         ReactIntl.{
-          id: "259df0fb35471979ad5c89945ebb9d30",
-          defaultMessage: "{count, plural, =0 {No items} other {{count} items in {folder}}}",
+          id: "e16a7ee3c217a2d763bf6c1b7e0350f6",
+          defaultMessage: "{count, plural, one {{count} item in {folder}} other {{count} items in {folder}}}",
           maxLength: None,
         },
         values,

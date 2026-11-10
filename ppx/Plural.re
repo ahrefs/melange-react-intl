@@ -77,17 +77,6 @@ let findClosingBrace = (s, i) => {
   go(i, 0);
 };
 
-/* Selectors are keywords (zero, one, two, few, many, other) or exact matches (=0). */
-let readSelector = (s, i) =>
-  switch (expectChar(s, i, '=')) {
-  | Some(j) =>
-    switch (readWord(s, j)) {
-    | Some((n, k)) => Some(("=" ++ n, k))
-    | None => None
-    }
-  | None => readWord(s, i)
-  };
-
 let ( let* ) = Option.bind;
 
 /* Raised for a message that starts a plural ([{name, plural,]) but doesn't finish it. */
@@ -122,7 +111,7 @@ let parseAt = (s, start) => {
       };
     | None =>
       let (selector, i) =
-        switch (readSelector(s, i)) {
+        switch (readWord(s, i)) {
         | Some(found) => found
         | None => fail(Printf.sprintf("has unexpected `%c` where a selector should be", s.[i]))
         };

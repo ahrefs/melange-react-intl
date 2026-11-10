@@ -77,13 +77,14 @@ string = [%intl.s
   "{name}: {count, plural, one {You've selected {countStr} item.} other {You've selected {countStr} items, {name}.}}"
 ];
 
-let stringWithExactPluralSelector: {
+
+let stringWithPluralArgumentInBranch: {
   .
   "count": int,
   "folder": string,
 } =>
 string = [%intl.s
-  "{count, plural, =0 {No items} other {{count} items in {folder}}}"
+  "{count, plural, one {{count} item in {folder}} other {{count} items in {folder}}}"
 ];
 
 let stringWithQuotedBracesInPluralBranch: {
