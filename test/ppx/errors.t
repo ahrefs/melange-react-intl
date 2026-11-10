@@ -50,6 +50,45 @@ Exact-match selectors are not supported
   Error: melange-react-intl: plural `count` has unexpected `=` where a selector should be
   [1]
 
+Unknown selector
+
+  $ cat > input.re <<EOF
+  > let t = [%intl.s "{count, plural, one {item} two {items} other {items}}"];
+  > EOF
+
+  $ ./ppx.sh --output re input.re
+  File "output.ml", line 1, characters 17-72:
+  1 | let t = [%intl.s "{count, plural, one {item} two {items} other {items}}"]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  Error: melange-react-intl: plural `count` has unknown selector `two`; use zero, one, few, many, other
+  [1]
+
+Selectors out of order
+
+  $ cat > input.re <<EOF
+  > let t = [%intl.s "{count, plural, other {items} one {item}}"];
+  > EOF
+
+  $ ./ppx.sh --output re input.re
+  File "output.ml", line 1, characters 17-60:
+  1 | let t = [%intl.s "{count, plural, other {items} one {item}}"]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  Error: melange-react-intl: plural `count` has selector `one` after `other`; selectors go in the order zero, one, few, many, other
+  [1]
+
+Repeated selector
+
+  $ cat > input.re <<EOF
+  > let t = [%intl.s "{count, plural, one {item} one {thing} other {items}}"];
+  > EOF
+
+  $ ./ppx.sh --output re input.re
+  File "output.ml", line 1, characters 17-72:
+  1 | let t = [%intl.s "{count, plural, one {item} one {thing} other {items}}"]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  Error: melange-react-intl: plural `count` repeats selector `one`
+  [1]
+
 Plain intl is checked too
 
   $ cat > input.re <<EOF

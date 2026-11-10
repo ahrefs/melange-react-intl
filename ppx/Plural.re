@@ -82,9 +82,19 @@ let ( let* ) = Option.bind;
 /* Raised for a message that starts a plural ([{name, plural,]) but doesn't finish it. */
 exception Error(string);
 
+/* The selectors a plural may use, in the order they must appear. These are the categories the
+   server-side renderer knows; [other] is required. */
+let selectors = ["zero", "one", "few", "many", "other"];
+
+let rec indexOf = (x, ~from=0) =>
+  fun
+  | [] => None
+  | [y, ..._] when y == x => Some(from)
+  | [_, ...rest] => indexOf(x, ~from=from + 1, rest);
+
 /* Parses [{name, plural, selector {body} ... other {body}}] starting at the opening brace [start].
    Returns [None] when the text there isn't a plural header. Raises [Error] when it is one but
-   the rest is malformed, because react-intl would reject the message at runtime. */
+   the rest is malformed or uses selectors other than [selectors], in that order. */
 let parseAt = (s, start) => {
   let* i = expectChar(s, start, '{');
   let* (name, i) = readWord(s, skipSpaces(s, i));
@@ -93,14 +103,15 @@ let parseAt = (s, start) => {
   let* i = kind == "plural" ? Some(i) : None;
   let* i = expectChar(s, skipSpaces(s, i), ',');
   let fail = reason => raise(Error(Printf.sprintf("plural `%s` %s", name, reason)));
-  let rec branches = (i, acc, hasOther) => {
+  /* [previous] is the selector of the branch before, if any. */
+  let rec branches = (i, acc, previous) => {
     let i = skipSpaces(s, i);
     if (i >= String.length(s)) {
       fail("is not closed");
     };
     switch (expectChar(s, i, '}')) {
     | Some(stop) =>
-      if (!hasOther) {
+      if (previous != Some("other")) {
         fail("has no `other` branch");
       };
       {
@@ -115,6 +126,25 @@ let parseAt = (s, start) => {
         | Some(found) => found
         | None => fail(Printf.sprintf("has unexpected `%c` where a selector should be", s.[i]))
         };
+      let rank =
+        switch (indexOf(selector, selectors)) {
+        | Some(rank) => rank
+        | None =>
+          fail(Printf.sprintf("has unknown selector `%s`; use %s", selector, String.concat(", ", selectors)))
+        };
+      switch (previous) {
+      | Some(prev) when prev == selector => fail(Printf.sprintf("repeats selector `%s`", selector))
+      | Some(prev) when Option.get(indexOf(prev, selectors)) >= rank =>
+        fail(
+          Printf.sprintf(
+            "has selector `%s` after `%s`; selectors go in the order %s",
+            selector,
+            prev,
+            String.concat(", ", selectors),
+          ),
+        )
+      | _ => ()
+      };
       let i = skipSpaces(s, i);
       if (expectChar(s, i, '{') == None) {
         fail(Printf.sprintf("is missing `{` after selector `%s`", selector));
@@ -125,10 +155,10 @@ let parseAt = (s, start) => {
         | None => fail(Printf.sprintf("has an unclosed `%s` branch", selector))
         };
       let body = String.sub(s, i + 1, close - i - 1);
-      branches(close + 1, [body, ...acc], hasOther || selector == "other");
+      branches(close + 1, [body, ...acc], Some(selector));
     };
   };
-  Some(branches(i, [], false));
+  Some(branches(i, [], None));
 };
 
 /* Top-level plurals in [s], left to right. */
