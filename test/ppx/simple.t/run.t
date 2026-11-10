@@ -177,6 +177,111 @@
         values,
       ): string
     );
+  let stringWithPluralBranchVariable:
+    {
+      .
+      "total": int,
+      "totalStr": string,
+    } =>
+    string =
+    (
+      values: {
+        .
+        "totalStr": string,
+        "total": int,
+      },
+    ) => (
+      ReactIntlPpxAdaptor.Message.format_to_s(
+        ~list_of_values=[("totalStr", `String(values##totalStr)), ("total", `Number(values##total))],
+        [@warning "-45"]
+        ReactIntl.{
+          id: "6a72218649361384d74c19c44c5faea7",
+          defaultMessage: "{total, plural, one {Select {totalStr} prompt} other {Select all {totalStr} prompts}}",
+          maxLength: None,
+        },
+        values,
+      ): string
+    );
+  let stringWithPluralBranchPunctuation:
+    {
+      .
+      "count": int,
+      "countStr": string,
+      "name": string,
+    } =>
+    string =
+    (
+      values: {
+        .
+        "countStr": string,
+        "name": string,
+        "count": int,
+      },
+    ) => (
+      ReactIntlPpxAdaptor.Message.format_to_s(
+        ~list_of_values=[
+          ("countStr", `String(values##countStr)),
+          ("name", `String(values##name)),
+          ("count", `Number(values##count)),
+        ],
+        [@warning "-45"]
+        ReactIntl.{
+          id: "8ad381f34ef5e7bda864780b8d9db0c9",
+          defaultMessage: "{name}: {count, plural, one {You've selected {countStr} item.} other {You've selected {countStr} items, {name}.}}",
+          maxLength: None,
+        },
+        values,
+      ): string
+    );
+  let stringWithExactPluralSelector:
+    {
+      .
+      "count": int,
+      "folder": string,
+    } =>
+    string =
+    (
+      values: {
+        .
+        "folder": string,
+        "count": int,
+      },
+    ) => (
+      ReactIntlPpxAdaptor.Message.format_to_s(
+        ~list_of_values=[("folder", `String(values##folder)), ("count", `Number(values##count))],
+        [@warning "-45"]
+        ReactIntl.{
+          id: "259df0fb35471979ad5c89945ebb9d30",
+          defaultMessage: "{count, plural, =0 {No items} other {{count} items in {folder}}}",
+          maxLength: None,
+        },
+        values,
+      ): string
+    );
+  let elementWithPluralBranchVariable:
+    {
+      .
+      "total": int,
+      "totalStr": React.element,
+    } =>
+    React.element =
+    (
+      values: {
+        .
+        "totalStr": React.element,
+        "total": int,
+      },
+    ) =>
+      ReactIntlPpxAdaptor.Message.format_to_el(
+        ~list_of_values=[("totalStr", `Element(values##totalStr)), ("total", `Number(values##total))],
+        [@warning "-45"]
+        ReactIntl.{
+          id: "6a72218649361384d74c19c44c5faea7",
+          defaultMessage: "{total, plural, one {Select {totalStr} prompt} other {Select all {totalStr} prompts}}",
+          maxLength: None,
+        },
+        values,
+      );
   let elementWithRichText: {. "a": string => React.element} => React.element =
     (values: {. "a": string => React.element}) =>
       ReactIntlPpxAdaptor.Message.format_to_el(

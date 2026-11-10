@@ -58,6 +58,43 @@ let stringWithPluralFormOnlyOther: {. "itemsCount": int} => string = [%intl.s
   "{itemsCount, plural, other {items}}"
 ];
 
+let stringWithPluralBranchVariable: {
+  .
+  "total": int,
+  "totalStr": string,
+} =>
+string = [%intl.s
+  "{total, plural, one {Select {totalStr} prompt} other {Select all {totalStr} prompts}}"
+];
+
+let stringWithPluralBranchPunctuation: {
+  .
+  "count": int,
+  "countStr": string,
+  "name": string,
+} =>
+string = [%intl.s
+  "{name}: {count, plural, one {You've selected {countStr} item.} other {You've selected {countStr} items, {name}.}}"
+];
+
+let stringWithExactPluralSelector: {
+  .
+  "count": int,
+  "folder": string,
+} =>
+string = [%intl.s
+  "{count, plural, =0 {No items} other {{count} items in {folder}}}"
+];
+
+let elementWithPluralBranchVariable: {
+  .
+  "total": int,
+  "totalStr": React.element,
+} =>
+React.element = [%intl.el
+  "{total, plural, one {Select {totalStr} prompt} other {Select all {totalStr} prompts}}"
+];
+
 let elementWithRichText: {. "a": string => React.element} => React.element = [%intl.el
   "Some text with <a>link text</a>"
 ];

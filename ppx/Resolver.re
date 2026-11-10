@@ -174,10 +174,13 @@ let makeValuesType = (~loc, fields: list((string, core_type))): core_type => {
 
 let makeString = (~loc, message, messageExp, description, maxLength) => {
   let recordExp = makeIntlRecord(~loc, message, messageExp, description, maxLength);
-  let pluralVariables = message |> Regexp.findAll(~regexp=Regexp.plural) |> List.map(label => (label, [%type: int]));
-  let cleanedMessage = pluralVariables == [] ? message : message |> Regexp.remove(~regexp=Regexp.plural);
+  let (pluralNames, cleanedMessage) = Plural.extract(message);
+  let pluralVariables = pluralNames |> List.map(label => (label, [%type: int]));
   let simpleVariables =
-    cleanedMessage |> Regexp.findAll(~regexp=Regexp.variable) |> List.map(label => (label, [%type: string]));
+    cleanedMessage
+    |> Regexp.findAll(~regexp=Regexp.variable)
+    |> List.filter(label => !List.mem(label, pluralNames))
+    |> List.map(label => (label, [%type: string]));
   let variables = simpleVariables @ pluralVariables;
 
   switch (variables) {
@@ -197,11 +200,14 @@ let makeString = (~loc, message, messageExp, description, maxLength) => {
 
 let makeReactElement = (~loc, message, messageExp, description, maxLength) => {
   let recordExp = makeIntlRecord(~loc, message, messageExp, description, maxLength);
-  let pluralVariables = message |> Regexp.findAll(~regexp=Regexp.plural) |> List.map(label => (label, [%type: int]));
-  let cleanedMessage = message |> Regexp.remove(~regexp=Regexp.plural);
+  let (pluralNames, cleanedMessage) = Plural.extract(message);
+  let pluralVariables = pluralNames |> List.map(label => (label, [%type: int]));
 
   let simpleVariables =
-    cleanedMessage |> Regexp.findAll(~regexp=Regexp.variable) |> List.map(label => (label, [%type: React.element]));
+    cleanedMessage
+    |> Regexp.findAll(~regexp=Regexp.variable)
+    |> List.filter(label => !List.mem(label, pluralNames))
+    |> List.map(label => (label, [%type: React.element]));
   let richTextVariables =
     cleanedMessage |> Regexp.extractTagNames |> List.map(label => (label, [%type: string => React.element]));
   let variables = simpleVariables @ pluralVariables @ richTextVariables;
