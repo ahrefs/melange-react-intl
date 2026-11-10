@@ -258,6 +258,31 @@
         values,
       ): string
     );
+  let stringWithQuotedBracesInPluralBranch:
+    {
+      .
+      "count": int,
+      "name": string,
+    } =>
+    string =
+    (
+      values: {
+        .
+        "name": string,
+        "count": int,
+      },
+    ) => (
+      ReactIntlPpxAdaptor.Message.format_to_s(
+        ~list_of_values=[("name", `String(values##name)), ("count", `Number(values##count))],
+        [@warning "-45"]
+        ReactIntl.{
+          id: "f6bdc36a2029e3274717974516b6f37b",
+          defaultMessage: "{count, plural, one {It''s one '{'item'}' for {name}} other {You've got '}' and '{' for {name}}}",
+          maxLength: None,
+        },
+        values,
+      ): string
+    );
   let elementWithPluralBranchVariable:
     {
       .

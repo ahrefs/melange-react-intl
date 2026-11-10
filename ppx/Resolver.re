@@ -25,7 +25,14 @@ let warning_45 = (~loc) =>
     ~payload=PStr([Builder.pstr_eval(~loc, Builder.estring(~loc, "-45"), [])]),
   );
 
+/* Raises a compile error for a malformed plural, e.g. one without an `other` branch. */
+let extractPlurals = (~loc, message) =>
+  try(Plural.extract(message)) {
+  | Plural.Error(reason) => Location.raise_errorf(~loc, "melange-react-intl: %s", reason)
+  };
+
 let makeIntlRecord = (~loc, message, messageExp, description, maxLength) => {
+  ignore(extractPlurals(~loc, message));
   let id = message |> tryUnescape |> makeId(~description?, ~maxLength);
   let idExp = Ast_helper.Exp.constant(Pconst_string(id, loc, None));
   let maxLengthExp =
@@ -174,7 +181,7 @@ let makeValuesType = (~loc, fields: list((string, core_type))): core_type => {
 
 let makeString = (~loc, message, messageExp, description, maxLength) => {
   let recordExp = makeIntlRecord(~loc, message, messageExp, description, maxLength);
-  let (pluralNames, cleanedMessage) = Plural.extract(message);
+  let (pluralNames, cleanedMessage) = extractPlurals(~loc, message);
   let pluralVariables = pluralNames |> List.map(label => (label, [%type: int]));
   let simpleVariables =
     cleanedMessage
@@ -200,7 +207,7 @@ let makeString = (~loc, message, messageExp, description, maxLength) => {
 
 let makeReactElement = (~loc, message, messageExp, description, maxLength) => {
   let recordExp = makeIntlRecord(~loc, message, messageExp, description, maxLength);
-  let (pluralNames, cleanedMessage) = Plural.extract(message);
+  let (pluralNames, cleanedMessage) = extractPlurals(~loc, message);
   let pluralVariables = pluralNames |> List.map(label => (label, [%type: int]));
 
   let simpleVariables =

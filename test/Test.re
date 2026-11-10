@@ -81,6 +81,16 @@ let stringWithExactPluralSelector:
   "{count, plural, =0 {No items} other {{count} items in {folder}}}"
 ];
 
+let stringWithQuotedBracesInPluralBranch:
+  {
+    .
+    "count": int,
+    "name": string,
+  } =>
+  string = [%intl.s
+  "{count, plural, one {It''s one '{'item'}' for {name}} other {You've got '}' and '{' for {name}}}"
+];
+
 let elementWithPluralBranchVariable:
   {
     .

@@ -37,6 +37,28 @@ let readWord = (s, i) => {
 
 let expectChar = (s, i, c) => i < String.length(s) && s.[i] == c ? Some(i + 1) : None;
 
+/* [j] points at an apostrophe. Returns the index just past the ICU quoting construct
+   that starts there: [''] is a literal apostrophe, and an apostrophe before [{], [}], [#]
+   or [|] quotes everything up to the next lone apostrophe. Any other apostrophe, as in
+   "You've", is literal. */
+let skipQuote = (s, j) => {
+  let len = String.length(s);
+  let at = k => k < len ? Some(s.[k]) : None;
+  switch (at(j + 1)) {
+  | Some('\'') => j + 2
+  | Some('{' | '}' | '#' | '|') =>
+    let rec go = k =>
+      switch (at(k), at(k + 1)) {
+      | (None, _) => len
+      | (Some('\''), Some('\'')) => go(k + 2)
+      | (Some('\''), _) => k + 1
+      | _ => go(k + 1)
+      };
+    go(j + 2);
+  | _ => j + 1
+  };
+};
+
 /* [i] points at an opening brace. Returns the index of the matching closing brace. */
 let findClosingBrace = (s, i) => {
   let len = String.length(s);
@@ -45,6 +67,7 @@ let findClosingBrace = (s, i) => {
       None;
     } else {
       switch (s.[j]) {
+      | '\'' => go(skipQuote(s, j), depth)
       | '{' => go(j + 1, depth + 1)
       | '}' when depth == 1 => Some(j)
       | '}' => go(j + 1, depth - 1)
@@ -67,7 +90,12 @@ let readSelector = (s, i) =>
 
 let ( let* ) = Option.bind;
 
-/* Parses [{name, plural, selector {body} ... other {body}}] starting at the opening brace [start]. */
+/* Raised for a message that starts a plural ([{name, plural,]) but doesn't finish it. */
+exception Error(string);
+
+/* Parses [{name, plural, selector {body} ... other {body}}] starting at the opening brace [start].
+   Returns [None] when the text there isn't a plural header. Raises [Error] when it is one but
+   the rest is malformed, because react-intl would reject the message at runtime. */
 let parseAt = (s, start) => {
   let* i = expectChar(s, start, '{');
   let* (name, i) = readWord(s, skipSpaces(s, i));
@@ -75,28 +103,43 @@ let parseAt = (s, start) => {
   let* (kind, i) = readWord(s, skipSpaces(s, i));
   let* i = kind == "plural" ? Some(i) : None;
   let* i = expectChar(s, skipSpaces(s, i), ',');
+  let fail = reason => raise(Error(Printf.sprintf("plural `%s` %s", name, reason)));
   let rec branches = (i, acc, hasOther) => {
     let i = skipSpaces(s, i);
+    if (i >= String.length(s)) {
+      fail("is not closed");
+    };
     switch (expectChar(s, i, '}')) {
     | Some(stop) =>
-      hasOther
-        ? Some({
-            name,
-            branches: List.rev(acc),
-            start,
-            stop,
-          })
-        : None
+      if (!hasOther) {
+        fail("has no `other` branch");
+      };
+      {
+        name,
+        branches: List.rev(acc),
+        start,
+        stop,
+      };
     | None =>
-      let* (selector, i) = readSelector(s, i);
+      let (selector, i) =
+        switch (readSelector(s, i)) {
+        | Some(found) => found
+        | None => fail(Printf.sprintf("has unexpected `%c` where a selector should be", s.[i]))
+        };
       let i = skipSpaces(s, i);
-      let* _ = expectChar(s, i, '{');
-      let* close = findClosingBrace(s, i);
+      if (expectChar(s, i, '{') == None) {
+        fail(Printf.sprintf("is missing `{` after selector `%s`", selector));
+      };
+      let close =
+        switch (findClosingBrace(s, i)) {
+        | Some(close) => close
+        | None => fail(Printf.sprintf("has an unclosed `%s` branch", selector))
+        };
       let body = String.sub(s, i + 1, close - i - 1);
       branches(close + 1, [body, ...acc], hasOther || selector == "other");
     };
   };
-  branches(i, [], false);
+  Some(branches(i, [], false));
 };
 
 /* Top-level plurals in [s], left to right. */
@@ -105,6 +148,8 @@ let findAll = s => {
   let rec go = (i, acc) =>
     if (i >= len) {
       List.rev(acc);
+    } else if (s.[i] == '\'') {
+      go(skipQuote(s, i), acc);
     } else if (s.[i] == '{') {
       switch (parseAt(s, i)) {
       | Some(plural) => go(plural.stop, [plural, ...acc])
