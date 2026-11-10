@@ -1,7 +1,13 @@
 /* Finds ICU plural arguments such as
      {count, plural, one {{countStr} item} other {{countStr} items}}
-   Branch bodies may contain placeholders, punctuation and nested plurals, so the
-   scanner tracks brace depth instead of matching the body with a regexp. */
+
+   A branch body can hold any text, including digits and characters like . , ! and '.
+   Braces in a body must either belong to a {placeholder} or a nested plural, or be
+   ICU-quoted ('{' and '}'). The scanner tracks brace depth and skips quoted text to find
+   where each body ends.
+
+   Selectors must be zero, one, few, many and other, in that order, each at most once,
+   and other is required. A plural that breaks these rules or isn't closed raises [Error]. */
 
 type t = {
   name: string,
@@ -82,8 +88,7 @@ let ( let* ) = Option.bind;
 /* Raised for a message that starts a plural ([{name, plural,]) but doesn't finish it. */
 exception Error(string);
 
-/* The selectors a plural may use, in the order they must appear. These are the categories the
-   server-side renderer knows; [other] is required. */
+/* The selectors a plural may use, in the order they must appear. [other] is required. */
 let selectors = ["zero", "one", "few", "many", "other"];
 
 let rec indexOf = (x, ~from=0) =>
