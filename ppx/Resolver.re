@@ -25,6 +25,12 @@ let warning_45 = (~loc) =>
     ~payload=PStr([Builder.pstr_eval(~loc, Builder.estring(~loc, "-45"), [])]),
   );
 
+/* Raises a compile error for a malformed plural, e.g. one without an `other` branch. */
+let extractPlurals = (~loc, message) =>
+  try(Plural.extract(message)) {
+  | Plural.Error(reason) => Location.raise_errorf(~loc, "melange-react-intl: %s", reason)
+  };
+
 let makeIntlRecord = (~loc, message, messageExp, description, maxLength) => {
   let id = message |> tryUnescape |> makeId(~description?, ~maxLength);
   let idExp = Ast_helper.Exp.constant(Pconst_string(id, loc, None));
@@ -46,6 +52,12 @@ let makeIntlRecord = (~loc, message, messageExp, description, maxLength) => {
     ...expr,
     pexp_attributes: [warning_45(~loc)],
   };
+};
+
+/* For plain [%intl]: validates plurals, then builds the record. */
+let makeMessage = (~loc, message, messageExp, description, maxLength) => {
+  ignore(extractPlurals(~loc, message));
+  makeIntlRecord(~loc, message, messageExp, description, maxLength);
 };
 
 let toList = (~loc, list_of_expr: list(expression)) => {
@@ -174,8 +186,8 @@ let makeValuesType = (~loc, fields: list((string, core_type))): core_type => {
 
 let makeString = (~loc, message, messageExp, description, maxLength) => {
   let recordExp = makeIntlRecord(~loc, message, messageExp, description, maxLength);
-  let pluralVariables = message |> Regexp.findAll(~regexp=Regexp.plural) |> List.map(label => (label, [%type: int]));
-  let cleanedMessage = pluralVariables == [] ? message : message |> Regexp.remove(~regexp=Regexp.plural);
+  let (pluralNames, cleanedMessage) = extractPlurals(~loc, message);
+  let pluralVariables = pluralNames |> List.map(label => (label, [%type: int]));
   let simpleVariables =
     cleanedMessage |> Regexp.findAll(~regexp=Regexp.variable) |> List.map(label => (label, [%type: string]));
   let variables = simpleVariables @ pluralVariables;
@@ -197,8 +209,8 @@ let makeString = (~loc, message, messageExp, description, maxLength) => {
 
 let makeReactElement = (~loc, message, messageExp, description, maxLength) => {
   let recordExp = makeIntlRecord(~loc, message, messageExp, description, maxLength);
-  let pluralVariables = message |> Regexp.findAll(~regexp=Regexp.plural) |> List.map(label => (label, [%type: int]));
-  let cleanedMessage = message |> Regexp.remove(~regexp=Regexp.plural);
+  let (pluralNames, cleanedMessage) = extractPlurals(~loc, message);
+  let pluralVariables = pluralNames |> List.map(label => (label, [%type: int]));
 
   let simpleVariables =
     cleanedMessage |> Regexp.findAll(~regexp=Regexp.variable) |> List.map(label => (label, [%type: React.element]));

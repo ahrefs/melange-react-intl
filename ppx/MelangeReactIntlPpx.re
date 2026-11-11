@@ -92,7 +92,7 @@ let () = {
     ~rules=[
       context_free_expression_tranform("intl", (~loc, expression) => {
         let (messsage, messageExpr, description, maxLength) = extractMessage(~loc, expression);
-        Resolver.makeIntlRecord(~loc, messsage, messageExpr, description, maxLength);
+        Resolver.makeMessage(~loc, messsage, messageExpr, description, maxLength);
       }),
       context_free_expression_tranform("intl.s", (~loc, expression) => {
         let (messsage, messageExpr, description, maxLength) = extractMessage(~loc, expression);
