@@ -32,7 +32,6 @@ let extractPlurals = (~loc, message) =>
   };
 
 let makeIntlRecord = (~loc, message, messageExp, description, maxLength) => {
-  ignore(extractPlurals(~loc, message));
   let id = message |> tryUnescape |> makeId(~description?, ~maxLength);
   let idExp = Ast_helper.Exp.constant(Pconst_string(id, loc, None));
   let maxLengthExp =
@@ -53,6 +52,12 @@ let makeIntlRecord = (~loc, message, messageExp, description, maxLength) => {
     ...expr,
     pexp_attributes: [warning_45(~loc)],
   };
+};
+
+/* For plain [%intl]: validates plurals, then builds the record. */
+let makeMessage = (~loc, message, messageExp, description, maxLength) => {
+  ignore(extractPlurals(~loc, message));
+  makeIntlRecord(~loc, message, messageExp, description, maxLength);
 };
 
 let toList = (~loc, list_of_expr: list(expression)) => {
@@ -184,10 +189,7 @@ let makeString = (~loc, message, messageExp, description, maxLength) => {
   let (pluralNames, cleanedMessage) = extractPlurals(~loc, message);
   let pluralVariables = pluralNames |> List.map(label => (label, [%type: int]));
   let simpleVariables =
-    cleanedMessage
-    |> Regexp.findAll(~regexp=Regexp.variable)
-    |> List.filter(label => !List.mem(label, pluralNames))
-    |> List.map(label => (label, [%type: string]));
+    cleanedMessage |> Regexp.findAll(~regexp=Regexp.variable) |> List.map(label => (label, [%type: string]));
   let variables = simpleVariables @ pluralVariables;
 
   switch (variables) {
@@ -211,10 +213,7 @@ let makeReactElement = (~loc, message, messageExp, description, maxLength) => {
   let pluralVariables = pluralNames |> List.map(label => (label, [%type: int]));
 
   let simpleVariables =
-    cleanedMessage
-    |> Regexp.findAll(~regexp=Regexp.variable)
-    |> List.filter(label => !List.mem(label, pluralNames))
-    |> List.map(label => (label, [%type: React.element]));
+    cleanedMessage |> Regexp.findAll(~regexp=Regexp.variable) |> List.map(label => (label, [%type: React.element]));
   let richTextVariables =
     cleanedMessage |> Regexp.extractTagNames |> List.map(label => (label, [%type: string => React.element]));
   let variables = simpleVariables @ pluralVariables @ richTextVariables;

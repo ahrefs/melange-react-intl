@@ -89,6 +89,45 @@ Repeated selector
   Error: melange-react-intl: plural `count` repeats selector `one`
   [1]
 
+Plural argument reused as a placeholder
+
+  $ cat > input.re <<EOF
+  > let t = [%intl.s "{count, plural, one {{count} item} other {{count} items}}"];
+  > EOF
+
+  $ ./ppx.sh --output re input.re
+  File "output.ml", line 1, characters 17-76:
+  1 | let t = [%intl.s "{count, plural, one {{count} item} other {{count} items}}"]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  Error: melange-react-intl: plural `count` is also used as the placeholder `{count}`; pass the formatted number as a separate variable instead
+  [1]
+
+Plural argument reused as a placeholder outside the plural
+
+  $ cat > input.re <<EOF
+  > let t = [%intl.s "{count} {count, plural, one {item} other {items}}"];
+  > EOF
+
+  $ ./ppx.sh --output re input.re
+  File "output.ml", line 1, characters 17-68:
+  1 | let t = [%intl.s "{count} {count, plural, one {item} other {items}}"]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  Error: melange-react-intl: plural `count` is also used as the placeholder `{count}`; pass the formatted number as a separate variable instead
+  [1]
+
+Unquoted # in a branch
+
+  $ cat > input.re <<EOF
+  > let t = [%intl.s "{count, plural, one {# item} other {# items}}"];
+  > EOF
+
+  $ ./ppx.sh --output re input.re
+  File "output.ml", line 1, characters 17-64:
+  1 | let t = [%intl.s "{count, plural, one {# item} other {# items}}"]
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  Error: melange-react-intl: plural `count` uses `#` in its `one` branch; pass the formatted count as a separate variable instead
+  [1]
+
 Plain intl is checked too
 
   $ cat > input.re <<EOF

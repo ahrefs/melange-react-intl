@@ -233,31 +233,6 @@
         values,
       ): string
     );
-  let stringWithPluralArgumentInBranch:
-    {
-      .
-      "count": int,
-      "folder": string,
-    } =>
-    string =
-    (
-      values: {
-        .
-        "folder": string,
-        "count": int,
-      },
-    ) => (
-      ReactIntlPpxAdaptor.Message.format_to_s(
-        ~list_of_values=[("folder", `String(values##folder)), ("count", `Number(values##count))],
-        [@warning "-45"]
-        ReactIntl.{
-          id: "e16a7ee3c217a2d763bf6c1b7e0350f6",
-          defaultMessage: "{count, plural, one {{count} item in {folder}} other {{count} items in {folder}}}",
-          maxLength: None,
-        },
-        values,
-      ): string
-    );
   let stringWithQuotedBracesInPluralBranch:
     {
       .
@@ -317,6 +292,30 @@
         values,
       ): string
     );
+  let elementWithQuotedSyntaxInPluralBranch:
+    {
+      .
+      "n": int,
+      "nStr": React.element,
+    } =>
+    React.element =
+    (
+      values: {
+        .
+        "nStr": React.element,
+        "n": int,
+      },
+    ) =>
+      ReactIntlPpxAdaptor.Message.format_to_el(
+        ~list_of_values=[("nStr", `Element(values##nStr)), ("n", `Number(values##n))],
+        [@warning "-45"]
+        ReactIntl.{
+          id: "e689eac015fb2ad110ff254e3aaa9ef4",
+          defaultMessage: "{n, plural, one {Type '<b>'x'</b>' or '{name}' as '#'1} other {Type '<b>'xs'</b>' or '{name}' as '#'{nStr}}}",
+          maxLength: None,
+        },
+        values,
+      );
   let elementWithPluralBranchVariable:
     {
       .

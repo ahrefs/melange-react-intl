@@ -71,16 +71,6 @@ let stringWithPluralBranchPunctuation:
   "{name}: {count, plural, one {You've selected {countStr} item.} other {You've selected {countStr} items, {name}.}}"
 ];
 
-let stringWithPluralArgumentInBranch:
-  {
-    .
-    "count": int,
-    "folder": string,
-  } =>
-  string = [%intl.s
-  "{count, plural, one {{count} item in {folder}} other {{count} items in {folder}}}"
-];
-
 let stringWithQuotedBracesInPluralBranch:
   {
     .
@@ -101,6 +91,16 @@ let stringWithSiblingPlurals:
   } =>
   string = [%intl.s
   "{apples, plural, one {{applesStr} apple} other {{applesStr} apples}} and {pears, plural, one {{pearsStr} pear} other {{pearsStr} pears}}"
+];
+
+let elementWithQuotedSyntaxInPluralBranch:
+  {
+    .
+    "n": int,
+    "nStr": React.element,
+  } =>
+  React.element = [%intl.el
+  "{n, plural, one {Type '<b>'x'</b>' or '{name}' as '#'1} other {Type '<b>'xs'</b>' or '{name}' as '#'{nStr}}}"
 ];
 
 let elementWithPluralBranchVariable:
